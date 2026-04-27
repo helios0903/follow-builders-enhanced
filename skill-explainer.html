@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>What is a Claude Skill? — Follow Builders Enhanced</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f8f9fa; color: #1a1a2e; line-height: 1.6; }
+
+  /* Hero */
+  .hero { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); color: white; padding: 64px 24px; text-align: center; }
+  .hero h1 { font-size: clamp(28px, 5vw, 48px); font-weight: 800; letter-spacing: -1px; margin-bottom: 16px; }
+  .hero h1 span { color: #e94560; }
+  .hero p { font-size: 18px; color: #a8b2d8; max-width: 560px; margin: 0 auto; }
+  .hero-badge { display: inline-block; background: rgba(233,69,96,0.2); border: 1px solid rgba(233,69,96,0.4); color: #e94560; padding: 4px 14px; border-radius: 20px; font-size: 13px; font-weight: 600; margin-bottom: 20px; letter-spacing: 0.5px; }
+
+  /* Layout */
+  .container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+  section { padding: 64px 0; }
+  h2 { font-size: 28px; font-weight: 700; margin-bottom: 8px; letter-spacing: -0.5px; }
+  .section-label { font-size: 12px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: #e94560; margin-bottom: 10px; }
+  .section-sub { color: #666; font-size: 16px; margin-bottom: 40px; }
+
+  /* Skill anatomy */
+  .anatomy-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 24px; }
+  .anatomy-card { background: white; border-radius: 16px; padding: 28px; box-shadow: 0 2px 20px rgba(0,0,0,0.06); border-top: 4px solid; transition: transform 0.2s; }
+  .anatomy-card:hover { transform: translateY(-4px); }
+  .anatomy-card:nth-child(1) { border-color: #6c63ff; }
+  .anatomy-card:nth-child(2) { border-color: #e94560; }
+  .anatomy-card:nth-child(3) { border-color: #00b894; }
+  .anatomy-card .icon { font-size: 32px; margin-bottom: 12px; }
+  .anatomy-card h3 { font-size: 18px; font-weight: 700; margin-bottom: 6px; }
+  .anatomy-card .filename { font-family: 'SF Mono', 'Fira Code', monospace; font-size: 13px; background: #f0f0f0; padding: 3px 8px; border-radius: 6px; color: #555; margin-bottom: 10px; display: inline-block; }
+  .anatomy-card p { font-size: 14px; color: #555; }
+
+  /* Flow diagram */
+  .flow { background: white; border-radius: 20px; padding: 40px; box-shadow: 0 2px 20px rgba(0,0,0,0.06); }
+  .flow-steps { display: flex; align-items: center; gap: 0; flex-wrap: wrap; justify-content: center; }
+  .flow-step { text-align: center; padding: 16px 20px; }
+  .flow-box { background: #f8f9fa; border: 2px solid #e5e7eb; border-radius: 12px; padding: 14px 18px; min-width: 130px; }
+  .flow-box.highlight { background: linear-gradient(135deg, #6c63ff, #e94560); border-color: transparent; color: white; }
+  .flow-box .step-icon { font-size: 24px; margin-bottom: 6px; }
+  .flow-box .step-name { font-size: 13px; font-weight: 700; }
+  .flow-box .step-sub { font-size: 11px; color: #888; margin-top: 2px; }
+  .flow-box.highlight .step-sub { color: rgba(255,255,255,0.7); }
+  .flow-arrow { font-size: 22px; color: #ccc; padding: 0 4px; }
+
+  /* Before / After */
+  .compare { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  @media (max-width: 700px) { .compare { grid-template-columns: 1fr; } }
+  .compare-box { border-radius: 16px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.1); }
+  .compare-header { padding: 16px 20px; font-weight: 700; font-size: 15px; display: flex; align-items: center; gap: 8px; }
+  .compare-box.before .compare-header { background: #fee2e2; color: #991b1b; }
+  .compare-box.after .compare-header { background: #d1fae5; color: #065f46; }
+  .compare-body { background: white; padding: 20px; font-size: 13px; }
+
+  /* Before: plain text preview */
+  .plain-email { font-family: 'SF Mono', monospace; font-size: 12px; color: #555; line-height: 1.8; background: #f9f9f9; padding: 16px; border-radius: 8px; white-space: pre-wrap; }
+
+  /* After: HTML email preview */
+  .html-email { border: 1px solid #e5e7eb; border-radius: 8px; overflow: hidden; }
+  .html-email-header { background: #f3f4f6; padding: 10px 14px; font-size: 12px; color: #888; border-bottom: 1px solid #e5e7eb; }
+  .html-email-body { padding: 16px; }
+  .html-email-body h4 { font-size: 15px; font-weight: 700; color: #1a1a2e; border-bottom: 2px solid #e5e7eb; padding-bottom: 6px; margin-bottom: 12px; }
+  .html-email-body .section-title { font-size: 12px; font-weight: 700; color: #6c63ff; text-transform: uppercase; letter-spacing: 1px; margin: 14px 0 8px; }
+  .html-email-body .builder-en { font-size: 13px; color: #1a1a2e; margin-bottom: 4px; }
+  .html-email-body .builder-en a { color: #2563eb; text-decoration: none; font-weight: 600; }
+  .html-email-body .builder-zh { font-size: 12px; color: #6b7280; margin-bottom: 14px; }
+  .html-email-body .builder-zh a { color: #7c3aed; text-decoration: none; }
+  .html-email-body .tag { display: inline-block; background: #eff6ff; color: #1d4ed8; font-size: 10px; padding: 2px 7px; border-radius: 10px; font-weight: 600; }
+
+  /* Issues / fixes */
+  .issues-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 20px; }
+  .issue-card { background: white; border-radius: 14px; padding: 24px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); }
+  .issue-card .badge { font-size: 11px; font-weight: 700; padding: 3px 10px; border-radius: 20px; margin-bottom: 12px; display: inline-block; }
+  .issue-card .badge.fixed { background: #d1fae5; color: #065f46; }
+  .issue-card h4 { font-size: 16px; font-weight: 700; margin-bottom: 8px; }
+  .issue-card .before-text { font-size: 13px; color: #dc2626; background: #fee2e2; padding: 8px 12px; border-radius: 8px; margin-bottom: 8px; }
+  .issue-card .after-text { font-size: 13px; color: #065f46; background: #d1fae5; padding: 8px 12px; border-radius: 8px; }
+  .issue-card .arrow { text-align: center; color: #9ca3af; font-size: 18px; margin: 4px 0; }
+
+  /* File tree */
+  .file-tree { background: #1a1a2e; border-radius: 14px; padding: 28px; color: #a8b2d8; font-family: 'SF Mono', 'Fira Code', monospace; font-size: 14px; line-height: 2; }
+  .file-tree .dir { color: #6c63ff; }
+  .file-tree .file { color: #a8b2d8; }
+  .file-tree .comment { color: #4a5568; }
+  .file-tree .new { color: #00b894; }
+
+  /* Stats */
+  .stats { display: flex; gap: 24px; flex-wrap: wrap; }
+  .stat { background: white; border-radius: 14px; padding: 24px 32px; box-shadow: 0 2px 16px rgba(0,0,0,0.06); flex: 1; min-width: 160px; text-align: center; }
+  .stat .num { font-size: 40px; font-weight: 800; color: #6c63ff; line-height: 1; }
+  .stat .label { font-size: 13px; color: #888; margin-top: 6px; }
+
+  /* Footer */
+  footer { background: #1a1a2e; color: #4a5568; text-align: center; padding: 32px; font-size: 14px; }
+  footer a { color: #6c63ff; text-decoration: none; }
+
+  .divider { border: none; border-top: 1px solid #e5e7eb; }
+</style>
+</head>
+<body>
+
+<!-- Hero -->
+<div class="hero">
+  <div class="container">
+    <div class="hero-badge">Claude Code Skill</div>
+    <h1>What is a <span>Skill</span>?</h1>
+    <p>A reusable instruction set that teaches Claude how to do a specific job — and the story of how we upgraded the Follow Builders digest.</p>
+  </div>
+</div>
+
+<!-- What is a skill -->
+<section>
+  <div class="container">
+    <div class="section-label">Concept</div>
+    <h2>A skill is Claude's instruction manual</h2>
+    <p class="section-sub">Three components, one job: tell Claude when to act, how to act, and give it the tools it needs.</p>
+
+    <div class="anatomy-grid">
+      <div class="anatomy-card">
+        <div class="icon">🧠</div>
+        <h3>SKILL.md</h3>
+        <div class="filename">SKILL.md</div>
+        <p>The brain. A markdown file that defines <strong>when to trigger</strong> (via the description field) and <strong>what to do</strong> (step-by-step instructions). Claude reads this every time the skill activates.</p>
+      </div>
+      <div class="anatomy-card">
+        <div class="icon">⚙️</div>
+        <h3>Scripts</h3>
+        <div class="filename">scripts/</div>
+        <p>The hands. Node.js or shell scripts that handle <strong>deterministic work</strong> — fetching data, sending emails, formatting files. No AI needed for these, just reliable execution.</p>
+      </div>
+      <div class="anatomy-card">
+        <div class="icon">✍️</div>
+        <h3>Prompts</h3>
+        <div class="filename">prompts/</div>
+        <p>The style guide. Markdown files that define <strong>how Claude should write</strong> — tone, format, what to include or skip. Loaded into context when the skill runs.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- How it works -->
+<section style="background: white;">
+  <div class="container">
+    <div class="section-label">Architecture</div>
+    <h2>How Follow Builders works</h2>
+    <p class="section-sub">Data flows from GitHub feeds through Claude's brain and into your inbox.</p>
+
+    <div class="flow">
+      <div class="flow-steps">
+        <div class="flow-step">
+          <div class="flow-box">
+            <div class="step-icon">☁️</div>
+            <div class="step-name">GitHub Feeds</div>
+            <div class="step-sub">X posts · Podcasts · Blogs</div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box">
+            <div class="step-icon">⚙️</div>
+            <div class="step-name">prepare-digest.js</div>
+            <div class="step-sub">Fetch + package JSON</div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box highlight">
+            <div class="step-icon">✨</div>
+            <div class="step-name">Claude (AI remix)</div>
+            <div class="step-sub">Write · Translate · Format</div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box">
+            <div class="step-icon">📧</div>
+            <div class="step-name">deliver-html.js</div>
+            <div class="step-sub">HTML email via Resend</div>
+          </div>
+        </div>
+        <div class="flow-arrow">→</div>
+        <div class="flow-step">
+          <div class="flow-box">
+            <div class="step-icon">📱</div>
+            <div class="step-name">Your Inbox</div>
+            <div class="step-sub">7:00 AM daily · Seoul</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- Before / After -->
+<section>
+  <div class="container">
+    <div class="section-label">The Upgrade</div>
+    <h2>Before vs After</h2>
+    <p class="section-sub">The original cron bypassed Claude entirely. The new pipeline brings AI into every scheduled delivery.</p>
+
+    <div class="compare">
+      <!-- Before -->
+      <div class="compare-box before">
+        <div class="compare-header">❌ Before — Raw JSON dump</div>
+        <div class="compare-body">
+          <div class="plain-email">AI Builders Digest — Mon, Apr 28, 2026
+
+━━━━━━━━━━━━━━━━━━━
+X / TWITTER
+━━━━━━━━━━━━━━━━━━━
+
+Sam Altman
+there should be a protocol that is equally usable by people and agents
+https://x.com/sama/status/204...
+
+[No Chinese translation]
+[Missing links]
+[Raw tweet text, no curation]
+[Plain text, no formatting]
+          </div>
+        </div>
+      </div>
+
+      <!-- After -->
+      <div class="compare-box after">
+        <div class="compare-header">✅ After — AI-remixed HTML</div>
+        <div class="compare-body">
+          <div class="html-email">
+            <div class="html-email-header">📧 AI Builders Digest — Tuesday, April 28, 2026</div>
+            <div class="html-email-body">
+              <div class="section-title">🐦 X / Twitter</div>
+              <div class="builder-en">
+                <a href="#">OpenAI CEO Sam Altman</a> — called for a rethink of OS and UI in the AI agent era: "there should be a protocol equally usable by people and agents." He also published <a href="#">OpenAI's five principles</a> and shared <a href="#">genuine excitement</a> at builder reception to GPT-5.5.
+              </div>
+              <div class="builder-zh">
+                <a href="#">OpenAI CEO Sam Altman</a> — 呼吁在 AI agent 时代重新思考操作系统和 UI："应该有一个人类和 agent 都能同样使用的协议"。他还发布了 <a href="#">OpenAI 五大原则</a>，并<a href="#">表达了对</a> GPT-5.5 获得 builder 热烈好评的喜悦。
+              </div>
+              <span class="tag">EN + ZH</span>&nbsp;<span class="tag" style="background:#f0fdf4;color:#166534;">Hyperlinked</span>&nbsp;<span class="tag" style="background:#fdf4ff;color:#7e22ce;">AI-curated</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- Three fixes -->
+<section style="background: white;">
+  <div class="container">
+    <div class="section-label">What changed</div>
+    <h2>Three problems, three fixes</h2>
+    <p class="section-sub">Each fix required a different layer of the skill stack.</p>
+
+    <div class="issues-grid">
+      <div class="issue-card">
+        <div class="badge fixed">✅ Fixed</div>
+        <h4>1. Email formatting</h4>
+        <div class="before-text">Plain text. No sections, no hierarchy, everything looks the same.</div>
+        <div class="arrow">↓</div>
+        <div class="after-text">HTML email with headings, sections, inline links, and mobile-friendly layout via <code>deliver-html.js</code>.</div>
+      </div>
+      <div class="issue-card">
+        <div class="badge fixed">✅ Fixed</div>
+        <h4>2. Missing tweet links</h4>
+        <div class="before-text">Only the first tweet URL included per builder. Context lost.</div>
+        <div class="arrow">↓</div>
+        <div class="after-text">Every substantive tweet gets its own hyperlink inline in the summary, via explicit rules in <code>remix-prompt.md</code>.</div>
+      </div>
+      <div class="issue-card">
+        <div class="badge fixed">✅ Fixed</div>
+        <h4>3. No Chinese translation</h4>
+        <div class="before-text">Cron bypassed Claude entirely. Raw JSON → plain text. No AI = no translation.</div>
+        <div class="arrow">↓</div>
+        <div class="after-text"><code>run-digest.sh</code> pipes data through <code>claude -p</code> headless mode, giving every scheduled run full AI remix + bilingual output.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider">
+
+<!-- Skill file structure -->
+<section>
+  <div class="container">
+    <div class="section-label">Structure</div>
+    <h2>The skill package</h2>
+    <p class="section-sub">Three new files extend the original skill without modifying it.</p>
+
+    <div class="file-tree">
+<span class="comment"># Original skill (unchanged)</span>
+<span class="dir">~/.claude/skills/follow-builders/</span>
+  <span class="file">├── SKILL.md</span>
+  <span class="file">├── scripts/prepare-digest.js</span>   <span class="comment">← fetches feeds</span>
+  <span class="file">└── scripts/deliver.js</span>          <span class="comment">← plain text email</span>
+
+<span class="comment"># New: enhanced delivery layer</span>
+<span class="dir">~/.follow-builders/</span>               <span class="comment">← user config dir</span>
+  <span class="file">├── config.json</span>                 <span class="comment">← your preferences</span>
+  <span class="file">├── .env</span>                        <span class="comment">← RESEND_API_KEY</span>
+  <span class="new">├── remix-prompt.md</span>             <span class="comment">← ✨ AI style guide</span>
+  <span class="new">├── deliver-html.js</span>             <span class="comment">← ✨ HTML email sender</span>
+  <span class="new">└── run-digest.sh</span>               <span class="comment">← ✨ cron orchestrator</span>
+
+<span class="comment"># Cron (7am Seoul time daily)</span>
+<span class="file">0 7 * * * TZ=Asia/Seoul ~/.follow-builders/run-digest.sh</span>
+    </div>
+
+    <div style="margin-top: 32px;">
+      <div class="stats">
+        <div class="stat">
+          <div class="num">3</div>
+          <div class="label">New files added</div>
+        </div>
+        <div class="stat">
+          <div class="num">0</div>
+          <div class="label">Original files modified</div>
+        </div>
+        <div class="stat">
+          <div class="num">25</div>
+          <div class="label">Builders tracked</div>
+        </div>
+        <div class="stat">
+          <div class="num">7am</div>
+          <div class="label">Daily delivery (Seoul)</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <p>Built with <a href="https://claude.ai/code">Claude Code</a> · Powered by <a href="https://github.com/zarazhangrui/follow-builders">follow-builders</a> · Delivered via <a href="https://resend.com">Resend</a></p>
+</footer>
+
+</body>
+</html>
