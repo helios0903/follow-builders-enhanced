@@ -9,7 +9,7 @@ on:
 jobs:
   send-digest:
     runs-on: ubuntu-latest
-    timeout-minutes: 10
+    timeout-minutes: 15
 
     steps:
       - name: Checkout repo
@@ -27,11 +27,6 @@ jobs:
 
       - name: Install Claude Code CLI
         run: npm install -g @anthropic-ai/claude-code
-
-      - name: Install deliver-html dependencies
-        run: |
-          cp scripts/deliver-html.js /tmp/deliver-html.js
-          echo '{"type":"module"}' > /tmp/package.json
 
       - name: Write config
         run: |
@@ -51,6 +46,8 @@ jobs:
           }
           EOF
           echo "RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}" > ~/.follow-builders/.env
+          cp scripts/deliver-html.js /tmp/deliver-html.js
+          echo '{"type":"module"}' > /tmp/package.json
 
       - name: Fetch digest data
         run: |
@@ -58,19 +55,44 @@ jobs:
           echo "Builders: $(node -e "const d=require('/tmp/fb-data.json'); console.log(d.stats?.xBuilders||0)")"
           echo "Podcasts: $(node -e "const d=require('/tmp/fb-data.json'); console.log(d.stats?.podcastEpisodes||0)")"
 
-      - name: AI remix via Claude
+      - name: AI remix via Claude API
         env:
           CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
         run: |
-          PROMPT="$(cat prompts/remix-prompt.md)
+          node --input-type=module << 'JSEOF'
+          import { readFileSync, writeFileSync } from 'fs';
 
-          Here is today's data JSON:
-          $(cat /tmp/fb-data.json)"
+          const token = process.env.CLAUDE_CODE_OAUTH_TOKEN;
+          if (!token) throw new Error('CLAUDE_CODE_OAUTH_TOKEN not set');
 
-          echo "$PROMPT" | claude -p > /tmp/fb-digest.html
-          echo "HTML size: $(wc -c < /tmp/fb-digest.html) bytes"
+          const prompt = readFileSync('prompts/remix-prompt.md', 'utf8');
+          const data = readFileSync('/tmp/fb-data.json', 'utf8');
+          const fullPrompt = `${prompt}\n\nHere is today's data JSON:\n${data}`;
+
+          // Try with Bearer auth (OAuth token format)
+          const res = await fetch('https://api.anthropic.com/v1/messages', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+              'anthropic-version': '2023-06-01',
+              'anthropic-beta': 'claude-code-20250219'
+            },
+            body: JSON.stringify({
+              model: 'claude-sonnet-4-5',
+              max_tokens: 8096,
+              messages: [{ role: 'user', content: fullPrompt }]
+            })
+          });
+
+          const json = await res.json();
+          if (!res.ok) throw new Error(`API error ${res.status}: ${JSON.stringify(json)}`);
+
+          const html = json.content[0].text;
+          writeFileSync('/tmp/fb-digest.html', html);
+          console.log(`Remix complete: ${html.length} bytes`);
+          JSEOF
 
       - name: Send HTML email
         run: |
-          cd /tmp
-          node deliver-html.js --file /tmp/fb-digest.html
+          cd /tmp && node deliver-html.js --file /tmp/fb-digest.html
