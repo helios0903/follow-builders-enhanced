@@ -45,6 +45,7 @@ jobs:
           echo "RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}" > ~/.follow-builders/.env
           cp scripts/deliver-html.js /tmp/deliver-html.js
           echo '{"type":"module"}' > /tmp/package.json
+          cd /tmp && npm install dotenv --save-dev --silent
 
       - name: Fetch digest data
         run: |
