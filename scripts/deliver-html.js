@@ -34,10 +34,10 @@ async function main() {
 
   const delivery = config.delivery || {};
   const apiKey = process.env.RESEND_API_KEY;
-  const toEmail = delivery.email;
+  const toEmail = Array.isArray(delivery.email) ? delivery.email : [delivery.email];
 
   if (!apiKey) { console.error('RESEND_API_KEY not set'); process.exit(1); }
-  if (!toEmail) { console.error('delivery.email not set in config.json'); process.exit(1); }
+  if (!toEmail.length) { console.error('delivery.email not set in config.json'); process.exit(1); }
 
   const html = await getInput();
   if (!html || html.trim().length < 100) {
@@ -75,7 +75,7 @@ ${html}
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-    body: JSON.stringify({ from: 'AI Builders Digest <digest@resend.dev>', to: [toEmail], subject, html: fullHtml })
+    body: JSON.stringify({ from: 'AI Builders Digest <digest@resend.dev>', to: toEmail, subject, html: fullHtml })
   });
 
   if (!res.ok) {
@@ -84,7 +84,7 @@ ${html}
     process.exit(1);
   }
 
-  console.log(JSON.stringify({ status: 'ok', to: toEmail, subject }));
+  console.log(JSON.stringify({ status: 'ok', to: toEmail.join(', '), subject }));
 }
 
 main();
