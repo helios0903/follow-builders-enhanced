@@ -25,27 +25,25 @@ jobs:
           git clone https://github.com/zarazhangrui/follow-builders.git /tmp/follow-builders
           cd /tmp/follow-builders/scripts && npm install
 
-      - name: Write config
+      - name: Write config and install dependencies
         run: |
           mkdir -p ~/.follow-builders
           cat > ~/.follow-builders/config.json << 'EOF'
-          {
-            "platform": "other",
-            "language": "bilingual",
-            "timezone": "Asia/Seoul",
-            "frequency": "daily",
-            "deliveryTime": "07:00",
-            "delivery": {
-              "method": "email",
-              "email": ["helios.chenn@gmail.com", "Buckleythomas92@gmail.com"]
-            },
-            "onboardingComplete": true
-          }
-          EOF
-          echo "RESEND_API_KEY=${{ secrets.RESEND_API_KEY }}" > ~/.follow-builders/.env
+{
+  "platform": "other",
+  "language": "bilingual",
+  "timezone": "Asia/Seoul",
+  "frequency": "daily",
+  "deliveryTime": "07:00",
+  "delivery": {
+    "method": "email",
+    "email": ["helios.chenn@gmail.com", "Buckleythomas92@gmail.com"]
+  },
+  "onboardingComplete": true
+}
+EOF
           cp scripts/deliver-html.js /tmp/deliver-html.js
-          echo '{"type":"module"}' > /tmp/package.json
-          cd /tmp && npm install dotenv --save-dev --silent
+          cd /tmp && echo '{"type":"module"}' > package.json && npm install nodemailer --silent
 
       - name: Fetch digest data
         run: |
@@ -90,5 +88,8 @@ jobs:
           JSEOF
 
       - name: Send HTML email
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_APP_PASSWORD: ${{ secrets.GMAIL_APP_PASSWORD }}
         run: |
           cd /tmp && node deliver-html.js --file /tmp/fb-digest.html

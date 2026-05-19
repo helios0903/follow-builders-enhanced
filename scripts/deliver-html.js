@@ -1,17 +1,15 @@
 #!/usr/bin/env node
-// Sends digest as HTML email via Resend.
-// Usage: echo "<html>..." | node deliver-html.js
-//        node deliver-html.js --file /path/to/digest.html
+// Sends digest as HTML email via Gmail SMTP (nodemailer).
+// Usage: node deliver-html.js --file /path/to/digest.html
 
 import { readFile } from 'fs/promises';
 import { existsSync } from 'fs';
 import { join } from 'path';
 import { homedir } from 'os';
-import { config as loadEnv } from 'dotenv';
+import { createTransport } from 'nodemailer';
 
 const USER_DIR = join(homedir(), '.follow-builders');
 const CONFIG_PATH = join(USER_DIR, 'config.json');
-const ENV_PATH = join(USER_DIR, '.env');
 
 async function getInput() {
   const args = process.argv.slice(2);
@@ -25,26 +23,35 @@ async function getInput() {
 }
 
 async function main() {
-  loadEnv({ path: ENV_PATH });
-
+  // Read config
   let config = {};
   if (existsSync(CONFIG_PATH)) {
     config = JSON.parse(await readFile(CONFIG_PATH, 'utf-8'));
   }
 
   const delivery = config.delivery || {};
-  const apiKey = process.env.RESEND_API_KEY;
   const toEmail = Array.isArray(delivery.email) ? delivery.email : [delivery.email];
 
-  if (!apiKey) { console.error('RESEND_API_KEY not set'); process.exit(1); }
-  if (!toEmail.length) { console.error('delivery.email not set in config.json'); process.exit(1); }
+  // Gmail SMTP credentials from env
+  const gmailUser = process.env.GMAIL_USER;
+  const gmailPass = process.env.GMAIL_APP_PASSWORD;
+
+  if (!gmailUser || !gmailPass) {
+    console.error('GMAIL_USER or GMAIL_APP_PASSWORD not set');
+    process.exit(1);
+  }
+  if (!toEmail.length || !toEmail[0]) {
+    console.error('delivery.email not set in config.json');
+    process.exit(1);
+  }
 
   const html = await getInput();
   if (!html || html.trim().length < 100) {
-    console.error('Empty or too-short input'); process.exit(1);
+    console.error('Empty or too-short input');
+    process.exit(1);
   }
 
-  // Wrap in a clean email shell if not already full HTML
+  // Wrap in email shell if not already full HTML
   const fullHtml = html.trim().startsWith('<!DOCTYPE') ? html : `<!DOCTYPE html>
 <html>
 <head>
@@ -69,22 +76,25 @@ ${html}
 </html>`;
 
   const subject = `AI Builders Digest — ${new Date().toLocaleDateString('en-US', {
-    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
+    weekday: 'long', year: 'numeric', month: 'long', day: 'numeric',
+    timeZone: 'Asia/Seoul'
   })}`;
 
-  const res = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${apiKey}` },
-    body: JSON.stringify({ from: 'AI Builders Digest <digest@resend.dev>', to: toEmail, subject, html: fullHtml })
+  const transporter = createTransport({
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true,
+    auth: { user: gmailUser, pass: gmailPass }
   });
 
-  if (!res.ok) {
-    const err = await res.json();
-    console.error('Resend error:', err.message || JSON.stringify(err));
-    process.exit(1);
-  }
+  await transporter.sendMail({
+    from: `"AI Builders Digest" <${gmailUser}>`,
+    to: toEmail.join(', '),
+    subject,
+    html: fullHtml
+  });
 
   console.log(JSON.stringify({ status: 'ok', to: toEmail.join(', '), subject }));
 }
 
-main();
+main().catch(err => { console.error(err.message); process.exit(1); });
