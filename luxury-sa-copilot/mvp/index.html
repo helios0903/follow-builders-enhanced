@@ -1,0 +1,616 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+  :root{color-scheme:light dark}
+  *{margin:0}
+  html,body{padding:0}
+  body{margin:0;font:14px/1.6 system-ui,sans-serif;background:#F6F5F2}
+  img{max-width:100%}
+  [hidden]{display:none!important}
+</style>
+<title>SA 外联副驾</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+  :root{
+    --ground:#F6F5F2; --surface:#FFFFFF; --surface-2:#EFEDE8; --line:#E2DDD5;
+    --ink:#211E1C; --muted:#6B655E; --faint:#948C82;
+    --accent:#8B3A42; --accent-soft:#F2E4E4; --accent-ink:#6E2C33;
+    --ember:#9A6412; --ember-soft:#F6ECD9;
+    --sage:#4F6B4A; --sage-soft:#E5EBE0;
+    --slate:#455A70; --slate-soft:#E4EAF0;
+    --shadow:0 1px 2px rgba(33,30,28,.05),0 8px 24px rgba(33,30,28,.06);
+    --r:14px; --r-sm:9px;
+    --serif:"Noto Serif SC",Georgia,"Songti SC",serif;
+    --sans:"Noto Sans SC",-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --ground:#171412; --surface:#211E1B; --surface-2:#2A2622; --line:#39332D;
+    --ink:#EDE8E1; --muted:#A79E93; --faint:#7C7469;
+    --accent:#CE8791; --accent-soft:#3A2529; --accent-ink:#E4AEB5;
+    --ember:#D6A24E; --ember-soft:#3A2E19;
+    --sage:#94B189; --sage-soft:#26301F;
+    --slate:#8FAAC6; --slate-soft:#1E2833;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
+  }}
+  :root[data-theme="dark"]{
+    --ground:#171412; --surface:#211E1B; --surface-2:#2A2622; --line:#39332D;
+    --ink:#EDE8E1; --muted:#A79E93; --faint:#7C7469;
+    --accent:#CE8791; --accent-soft:#3A2529; --accent-ink:#E4AEB5;
+    --ember:#D6A24E; --ember-soft:#3A2E19;
+    --sage:#94B189; --sage-soft:#26301F;
+    --slate:#8FAAC6; --slate-soft:#1E2833;
+    --shadow:0 1px 2px rgba(0,0,0,.3),0 10px 28px rgba(0,0,0,.4);
+  }
+
+  *{box-sizing:border-box}
+  body{background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.6;
+    -webkit-font-smoothing:antialiased;font-size:14px}
+  .wrap{max-width:1240px;margin:0 auto;padding:0 20px 64px}
+  h1,h2,h3{font-family:var(--serif);font-weight:600;line-height:1.25;text-wrap:balance;margin:0}
+  .num{font-variant-numeric:tabular-nums}
+  .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-weight:700}
+  button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+  button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+
+  /* ---- top bar ---- */
+  header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--ground) 88%,transparent);
+    backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  .top-in{max-width:1240px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+  .brand{display:flex;align-items:baseline;gap:11px}
+  .mark{font-family:var(--serif);font-weight:700;font-size:19px;letter-spacing:.01em}
+  .mark b{color:var(--accent)}
+  .brand small{color:var(--muted);font-size:12px;letter-spacing:.04em}
+  .campaign{margin-left:auto;display:flex;align-items:center;gap:10px;background:var(--surface);
+    border:1px solid var(--line);border-radius:999px;padding:6px 14px;box-shadow:var(--shadow);font-size:12.5px}
+  .campaign .dot{width:7px;height:7px;border-radius:50%;background:var(--accent)}
+  .campaign b{font-weight:700}
+  .icon-btn{width:38px;height:38px;border:1px solid var(--line);border-radius:10px;background:var(--surface);
+    display:grid;place-items:center;font-size:16px;box-shadow:var(--shadow)}
+  .icon-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+  /* ---- hero line ---- */
+  .lede{padding:30px 0 18px}
+  .lede h1{font-size:clamp(24px,3.4vw,34px)}
+  .lede p{max-width:60ch;color:var(--muted);margin:10px 0 0}
+
+  /* ---- summary strip ---- */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:6px 0 26px}
+  .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:15px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--s,var(--accent))}
+  .stat .k{font-size:11px;color:var(--muted);letter-spacing:.03em}
+  .stat .v{font-family:var(--serif);font-size:27px;font-weight:700;margin-top:2px}
+  .stat .v small{font-size:13px;color:var(--faint);font-family:var(--sans);font-weight:400}
+
+  /* ---- main grid ---- */
+  .grid{display:grid;grid-template-columns:minmax(360px,1fr) minmax(380px,1.15fr);gap:22px;align-items:start}
+  @media(max-width:900px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
+
+  .panel-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px}
+  .panel-h h2{font-size:16px}
+  .panel-h .hint{font-size:12px;color:var(--faint)}
+  .sort{display:flex;gap:4px;background:var(--surface-2);padding:3px;border-radius:9px;border:1px solid var(--line)}
+  .sort button{font-size:12px;padding:4px 10px;border-radius:6px;color:var(--muted);font-weight:500}
+  .sort button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+
+  /* ---- queue ---- */
+  .queue{display:flex;flex-direction:column;gap:10px}
+  .card{position:relative;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);
+    border-radius:var(--r);padding:14px 15px 14px 17px;box-shadow:var(--shadow);transition:transform .12s,border-color .12s;display:block}
+  .card::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;border-radius:3px 0 0 3px;background:var(--seg,var(--line))}
+  .card:hover{transform:translateY(-1px);border-color:var(--accent)}
+  .card[aria-selected="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow)}
+  .card .row1{display:flex;align-items:center;gap:11px}
+  .rank{font-family:var(--serif);font-weight:700;color:var(--faint);font-size:14px;width:20px;flex:none;text-align:center}
+  .ava{width:38px;height:38px;border-radius:50%;flex:none;display:grid;place-items:center;font-family:var(--serif);
+    font-weight:700;font-size:15px;color:#fff;background:var(--accent)}
+  .who{flex:1;min-width:0}
+  .who .nm{font-weight:700;font-size:14.5px;display:flex;align-items:center;gap:7px}
+  .who .sub{font-size:11.5px;color:var(--muted)}
+  .score{text-align:right;flex:none}
+  .score .big{font-family:var(--serif);font-weight:700;font-size:22px;line-height:1}
+  .score .lbl{font-size:9.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+  .chip{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;letter-spacing:.02em;white-space:nowrap}
+  .why{margin-top:10px;font-size:12.5px;color:var(--muted);display:flex;gap:7px;line-height:1.5}
+  .why::before{content:"";flex:none;width:14px;height:14px;margin-top:2px;border-radius:50%;
+    background:var(--seg-soft);box-shadow:inset 0 0 0 3px var(--seg)}
+  .bars{display:flex;gap:5px;margin-top:11px}
+  .bar{flex:1}
+  .bar .bl{font-size:9px;letter-spacing:.04em;color:var(--faint);text-transform:uppercase;display:flex;justify-content:space-between}
+  .bar .track{height:4px;background:var(--surface-2);border-radius:3px;margin-top:3px;overflow:hidden}
+  .bar .fill{height:100%;border-radius:3px;background:var(--slate)}
+  .bar.p .fill{background:var(--accent)} .bar.r .fill{background:var(--ember)} .bar.c .fill{background:var(--sage)}
+
+  /* ---- dossier ---- */
+  .dossier{position:sticky;top:78px}
+  .empty{background:var(--surface);border:1px dashed var(--line);border-radius:var(--r);padding:56px 30px;text-align:center;color:var(--muted)}
+  .empty .g{font-size:30px;margin-bottom:8px}
+  .dcard{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:var(--shadow);overflow:hidden}
+  .dhead{padding:20px 22px;border-bottom:1px solid var(--line);display:flex;gap:15px;align-items:flex-start}
+  .dhead .ava{width:52px;height:52px;font-size:20px}
+  .dhead h2{font-size:21px}
+  .dhead .meta{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .dhead .seg{margin-top:8px}
+  .facts{padding:18px 22px;display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;border-bottom:1px solid var(--line)}
+  .fact .k{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:700}
+  .fact .v{font-size:14px;margin-top:2px}
+  .fact .v.num{font-family:var(--serif);font-weight:700;font-size:17px}
+  .taglist{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}
+  .tag{font-size:11px;padding:2px 9px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
+  .tag b{color:var(--ink)}
+
+  .gen{padding:18px 22px 22px}
+  .gen-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
+  .gen-head h3{font-size:15px}
+  .btn{background:var(--accent);color:#fff;font-weight:700;font-size:13.5px;padding:9px 18px;border-radius:10px;
+    display:inline-flex;align-items:center;gap:8px;box-shadow:var(--shadow);transition:filter .12s}
+  .btn:hover{filter:brightness(1.07)} .btn:disabled{opacity:.55;cursor:progress}
+  .btn.ghost{background:var(--surface);color:var(--ink);border:1px solid var(--line);font-weight:500}
+  .btn.ghost:hover{border-color:var(--accent);color:var(--accent);filter:none}
+
+  .opener{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:0;margin-bottom:12px;overflow:hidden}
+  .opener .ot{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:1px solid var(--line);background:var(--surface)}
+  .opener .ot .lbl{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--muted);display:flex;align-items:center;gap:7px}
+  .opener .ot .tone{font-size:10.5px;color:var(--faint)}
+  .opener textarea{width:100%;border:none;background:transparent;color:var(--ink);font-family:var(--sans);
+    font-size:14px;line-height:1.7;padding:13px 15px;resize:vertical;min-height:84px}
+  .copy{font-size:11.5px;color:var(--accent);font-weight:700;padding:3px 8px}
+  .copy:hover{text-decoration:underline}
+
+  .split{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+  @media(max-width:520px){.split{grid-template-columns:1fr}.facts{grid-template-columns:1fr}}
+  .lane{border-radius:var(--r-sm);padding:13px 14px;border:1px solid var(--line)}
+  .lane.ai{background:var(--slate-soft);border-color:color-mix(in srgb,var(--slate) 30%,transparent)}
+  .lane.sa{background:var(--accent-soft);border-color:color-mix(in srgb,var(--accent) 26%,transparent)}
+  .lane h4{font-family:var(--sans);font-size:12px;font-weight:700;letter-spacing:.02em;margin:0 0 8px;display:flex;align-items:center;gap:7px}
+  .lane.ai h4{color:var(--slate)} .lane.sa h4{color:var(--accent-ink)}
+  .lane ul{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:7px}
+  .lane li{font-size:12.5px;line-height:1.5;display:flex;gap:7px;color:var(--ink)}
+  .lane li::before{content:"";flex:none;width:5px;height:5px;border-radius:50%;margin-top:7px;background:currentColor;opacity:.55}
+  .lane.ai li{color:var(--ink)}
+  .badge-note{font-size:11px;color:var(--faint);margin-top:10px;display:flex;gap:6px;align-items:baseline}
+
+  /* ---- settings ---- */
+  .modal{position:fixed;inset:0;z-index:40;display:none;place-items:center;background:rgba(20,17,15,.5);padding:20px}
+  .modal[data-open="true"]{display:grid}
+  .sheet{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);max-width:440px;width:100%;box-shadow:var(--shadow);overflow:hidden}
+  .sheet .sh{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+  .sheet .sh h3{font-size:16px}
+  .sheet .bd{padding:20px 22px;display:flex;flex-direction:column;gap:14px}
+  .field label{font-size:12px;font-weight:700;color:var(--muted);display:block;margin-bottom:5px}
+  .field input,.field select{width:100%;padding:9px 11px;border:1px solid var(--line);border-radius:9px;background:var(--ground);color:var(--ink);font-family:inherit;font-size:13px}
+  .field p{font-size:11.5px;color:var(--faint);margin:6px 0 0}
+  .toggle{display:flex;align-items:center;gap:10px;font-size:13px}
+  .switch{width:40px;height:23px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);position:relative;transition:background .15s;flex:none}
+  .switch::after{content:"";position:absolute;top:2px;left:2px;width:17px;height:17px;border-radius:50%;background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3);transition:transform .15s}
+  .switch[aria-checked="true"]{background:var(--accent)} .switch[aria-checked="true"]::after{transform:translateX(17px)}
+  .foot{font-size:11px;color:var(--faint);text-align:center;padding:24px 0 0}
+  .foot a{color:var(--accent)}
+  [hidden]{display:none!important}
+</style>
+
+<header class="top">
+  <div class="top-in">
+    <div class="brand">
+      <span class="mark">SA <b>外联副驾</b></span>
+      <small>Clienteling Copilot · MVP</small>
+    </div>
+    <div class="campaign" title="当前主推 campaign（影响 Relevance 打分）">
+      <span class="dot"></span><span>本周主推 · <b>秋冬新季 · 结构廓形手袋</b></span>
+    </div>
+    <button class="icon-btn" id="themeBtn" title="切换深浅色" aria-label="切换深浅色">◐</button>
+    <button class="icon-btn" id="setBtn" title="设置 · 接入 Claude" aria-label="设置">⚙</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="lede">
+    <p class="eyebrow">今日外联 · 决定先联系谁 + 怎么开口</p>
+    <h1>今天，这 14 位客户里谁值得你花时间？</h1>
+    <p>系统按 <b>潜力 × 匹配 × 置信</b> 三维排序，替代单维度 CRM 名单；对选中的客户，AI 负责事实钩子，把情感表达留给你。</p>
+  </div>
+
+  <div class="stats" id="stats"></div>
+
+  <div class="grid">
+    <section aria-label="客户队列">
+      <div class="panel-h">
+        <h2>今日优先队列</h2>
+        <div class="sort" id="sort" role="group" aria-label="排序方式">
+          <button data-k="priority" aria-pressed="true">综合优先级</button>
+          <button data-k="potential" aria-pressed="false">潜力</button>
+          <button data-k="dormant" aria-pressed="false">沉睡天数</button>
+        </div>
+      </div>
+      <div class="queue" id="queue"></div>
+    </section>
+
+    <section class="dossier" aria-label="客户档案与话术" id="dossier">
+      <div class="empty" id="empty">
+        <div class="g">◔</div>
+        <p><b>从左侧选一位客户</b><br>查看档案，并一键生成个性化开场白</p>
+      </div>
+      <div id="detail" hidden></div>
+    </section>
+  </div>
+
+  <p class="foot">高保真模拟器 · 数据为虚构演示数据，用于验证「AI 排序 + AI 话术」的核心价值 —— 详见 product brief。<br>
+  <a id="aboutLink" href="#" onclick="return false">MVP 会验证什么？</a></p>
+</div>
+
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="setTitle">
+  <div class="sheet">
+    <div class="sh"><h3 id="setTitle">生成引擎设置</h3><button class="icon-btn" id="closeSet" aria-label="关闭">✕</button></div>
+    <div class="bd">
+      <div class="toggle">
+        <button class="switch" id="liveSwitch" role="switch" aria-checked="false" aria-label="启用 Claude 实时生成"></button>
+        <div><b style="font-size:13px">接入 Claude 实时生成</b><div style="font-size:11.5px;color:var(--faint)">关闭时使用内置话术引擎（始终可用）</div></div>
+      </div>
+      <div class="field">
+        <label for="apiKey">Anthropic API Key</label>
+        <input id="apiKey" type="password" placeholder="sk-ant-..." autocomplete="off">
+        <p>仅存在本地浏览器（localStorage），直接从浏览器调用 Claude。在 Artifact 沙盒中浏览器对外请求可能被拦截；本地打开 index.html 最稳。内置引擎无需 key。</p>
+      </div>
+      <div class="field">
+        <label for="model">模型</label>
+        <select id="model">
+          <option value="claude-sonnet-5">claude-sonnet-5（推荐）</option>
+          <option value="claude-opus-5">claude-opus-5</option>
+          <option value="claude-haiku-4-5-20251001">claude-haiku-4-5</option>
+        </select>
+      </div>
+      <button class="btn" id="saveSet" style="justify-content:center">保存</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================ 模拟客户簿 ============================ */
+/* 字段按未来真实 CRM 字段设计，便于日后替换数据源 */
+const CATS=["手袋","成衣","珠宝","鞋履","腕表"];
+const FOCUS={"手袋":0.7,"成衣":0.3};      // 本周主推 campaign 的品类权重
+const NEW_ARRIVALS={"手袋":"结构廓形 Tote（秋冬新季）","成衣":"羊绒双面呢大衣"};
+
+const CLIENTS=[
+ {id:1,name:"周韵",city:"上海",tier:"VIC",spend:486000,count:22,lastBuy:38,lastContact:126,
+  cat:{手袋:.5,成衣:.3,珠宝:.15,鞋履:.05,腕表:0},dp:12,
+  items:[{n:"Diana 中号手袋",s:"2023 春"},{n:"羊绒长大衣",s:"2023 冬"}],
+  sig:["每年秋冬固定添置大衣与手袋","偏好低调经典款","去年底升任高管，出席活动增多"]},
+ {id:2,name:"林璟瑜",city:"成都",tier:"VIP",spend:214000,count:11,lastBuy:64,lastContact:98,
+  cat:{手袋:.6,成衣:.1,珠宝:.1,鞋履:.2,腕表:0},dp:10,
+  items:[{n:"链条小方包",s:"2024 春"},{n:"高跟凉鞋",s:"2024 夏"}],
+  sig:["社媒活跃、爱分享穿搭","对新款到店敏感","川渝客户，语气可轻松亲昵"]},
+ {id:3,name:"Grace 陈",city:"香港",tier:"VIC",spend:612000,count:28,lastBuy:12,lastContact:9,
+  cat:{手袋:.35,成衣:.25,珠宝:.3,鞋履:.05,腕表:.05},dp:12,
+  items:[{n:"高级珠宝项链",s:"2024 秋"}],
+  sig:["近期高频到店、关系稳固","更看重珠宝与配饰"]},
+ {id:4,name:"许安然",city:"北京",tier:"VIP",spend:158000,count:9,lastBuy:151,lastContact:142,
+  cat:{手袋:.55,成衣:.35,珠宝:.05,鞋履:.05,腕表:0},dp:9,
+  items:[{n:"经典托特包",s:"2023 秋"},{n:"真丝衬衫",s:"2023 秋"}],
+  sig:["曾是高频客户，近半年沉默","历史偏好与本季主推高度吻合","上次沟通提到在筹备搬家"]},
+ {id:5,name:"Vivian 吴",city:"上海",tier:"常规",spend:47000,count:3,lastBuy:210,lastContact:188,
+  cat:{手袋:.4,成衣:.2,珠宝:.1,鞋履:.3,腕表:0},dp:5,
+  items:[{n:"入门级手拿包",s:"2023 春"}],
+  sig:["数据较少、需结合相似客群推断","首购后未再回购"]},
+ {id:6,name:"赵敏华",city:"深圳",tier:"VIP",spend:276000,count:14,lastBuy:22,lastContact:20,
+  cat:{手袋:.3,成衣:.5,珠宝:.1,鞋履:.1,腕表:0},dp:11,
+  items:[{n:"定制西装套装",s:"2024 春"},{n:"羊绒针织",s:"2024 秋"}],
+  sig:["以成衣为主、近期活跃","职业女性、偏好利落廓形"]},
+ {id:7,name:"钱思远",city:"杭州",tier:"VIP",spend:189000,count:8,lastBuy:97,lastContact:110,
+  cat:{手袋:.2,成衣:.15,珠宝:.05,鞋履:.1,腕表:.5},dp:10,
+  items:[{n:"机械腕表",s:"2023 冬"}],
+  sig:["男性客户、腕表藏家","对手袋新品相关性低","太太生日临近（三周后）"]},
+ {id:8,name:"何俊贤",city:"广州",tier:"常规",spend:31000,count:2,lastBuy:260,lastContact:240,
+  cat:{手袋:.5,成衣:.3,珠宝:.1,鞋履:.1,腕表:0},dp:4,
+  items:[{n:"小号斜挎包",s:"2022 冬"}],
+  sig:["长期沉睡、信息稀薄","仅两次购买记录"]},
+ {id:9,name:"苏文清",city:"上海",tier:"VIC",spend:534000,count:19,lastBuy:73,lastContact:88,
+  cat:{手袋:.45,成衣:.4,珠宝:.1,鞋履:.05,腕表:0},dp:12,
+  items:[{n:"限量手袋",s:"2024 春"},{n:"晚礼服",s:"2023 冬"}],
+  sig:["高消费、审美要求高","近期到店频次下降","偏好限量与稀缺款"]},
+ {id:10,name:"Karen 梁",city:"香港",tier:"VIP",spend:243000,count:13,lastBuy:41,lastContact:52,
+  cat:{手袋:.6,成衣:.25,珠宝:.1,鞋履:.05,腕表:0},dp:11,
+  items:[{n:"经典翻盖包",s:"2024 春"}],
+  sig:["手袋忠实客户、匹配本季主推","关系温和、回复率高"]},
+ {id:11,name:"董雅琴",city:"南京",tier:"常规",spend:88000,count:5,lastBuy:133,lastContact:120,
+  cat:{手袋:.35,成衣:.45,珠宝:.15,鞋履:.05,腕表:0},dp:7,
+  items:[{n:"风衣",s:"2023 秋"},{n:"小号手袋",s:"2024 春"}],
+  sig:["成衣偏好、潜力中等","可用大衣新品做由头"]},
+ {id:12,name:"Mia 罗",city:"成都",tier:"VIP",spend:301000,count:16,lastBuy:55,lastContact:132,
+  cat:{手袋:.55,成衣:.35,珠宝:.05,鞋履:.05,腕表:0},dp:11,
+  items:[{n:"中号手袋",s:"2024 春"},{n:"羊毛大衣",s:"2023 冬"}],
+  sig:["高潜、但久未主动联系","历史几乎全在秋冬季成交","川渝客户，语气可亲昵"]},
+ {id:13,name:"杨宗霖",city:"台北",tier:"VIP",spend:167000,count:7,lastBuy:88,lastContact:95,
+  cat:{手袋:.15,成衣:.35,珠宝:.05,鞋履:.15,腕表:.3},dp:9,
+  items:[{n:"皮革公文包",s:"2023 秋"}],
+  sig:["男性客户、偏商务","手袋相关性偏低"]},
+ {id:14,name:"范舒窈",city:"上海",tier:"VIC",spend:458000,count:20,lastBuy:60,lastContact:105,
+  cat:{手袋:.5,成衣:.25,珠宝:.2,鞋履:.05,腕表:0},dp:12,
+  items:[{n:"限量手袋",s:"2023 秋"},{n:"高级珠宝耳环",s:"2024 春"}],
+  sig:["高价值、审美成熟","近期略降温、值得主动重连","手袋偏好强"]},
+];
+
+/* ============================ 打分逻辑 ============================ */
+const clamp=(x,a=0,b=100)=>Math.max(a,Math.min(b,x));
+const tierScore={VIC:1,VIP:.72,常规:.42};
+
+function score(c){
+  const potential=clamp(100*(0.5*Math.min(c.spend/320000,1)+0.3*Math.min(c.count/22,1)+0.2*tierScore[c.tier]));
+  let rel=0; for(const k in FOCUS){rel+=(c.cat[k]||0)*FOCUS[k];}
+  const relevance=clamp(100*(rel/0.7));            // 0.7 = 满配上限
+  const confidence=clamp(100*Math.min(c.dp/12,1));
+  let priority=0.42*potential+0.34*relevance+0.24*confidence;
+  const dormant=c.lastContact;
+  // 沉睡高潜机会加权：正是我们要打的客群
+  if(potential>=62&&dormant>=90) priority+=8;
+  let seg;
+  if(potential>=62&&dormant>=90) seg="hot";
+  else if(relevance>=62&&potential>=52) seg="warm";
+  else if(confidence<48) seg="thin";
+  else seg="base";
+  return {potential:Math.round(potential),relevance:Math.round(relevance),confidence:Math.round(confidence),
+    priority:clamp(Math.round(priority)),seg,dormant};
+}
+const SEG={
+  hot:{label:"沉睡高潜",v:"var(--ember)",soft:"var(--ember-soft)",ink:"var(--ember)"},
+  warm:{label:"高匹配",v:"var(--accent)",soft:"var(--accent-soft)",ink:"var(--accent-ink)"},
+  thin:{label:"待补全",v:"var(--slate)",soft:"var(--slate-soft)",ink:"var(--slate)"},
+  base:{label:"常规跟进",v:"var(--sage)",soft:"var(--sage-soft)",ink:"var(--sage)"},
+};
+
+function whyNow(c,s){
+  const topCat=Object.entries(c.cat).sort((a,b)=>b[1]-a[1])[0][0];
+  const matchesFocus=FOCUS[topCat]!==undefined;
+  const bits=[];
+  if(s.seg==="hot") bits.push(`潜力 ${s.potential} 分，却已 <b>${s.dormant} 天未联系</b>`);
+  else if(s.dormant>=90) bits.push(`已 ${s.dormant} 天未主动联系`);
+  else if(s.dormant<=30) bits.push(`近期互动活跃`);
+  if(matchesFocus) bits.push(`偏好「${topCat}」与本季主推高度吻合`);
+  else bits.push(`主偏好为「${topCat}」，与本季主推相关性偏低`);
+  if(s.confidence<48) bits.push(`数据较薄，建议先用相似客群推断`);
+  else if(c.items[0]) bits.push(`可从 ${c.items[0].n} 切入`);
+  return bits.slice(0,2).join("，")+"。";
+}
+
+/* ============================ 话术引擎（无需 LLM） ============================ */
+function dialect(city){
+  if(["成都","重庆"].includes(city)) return "川渝客户，可点缀一句轻松的方言（如「宝宝」「巴适」）拉近距离";
+  if(["香港","台北"].includes(city)) return "港台客户，语气可更谦和、多用敬语";
+  if(city==="上海") return "沪上客户，语气精致、含蓄，避免过度热情";
+  return "用你平时和她/他说话的真实语气";
+}
+function relevantArrival(c){
+  const top=Object.entries(c.cat).sort((a,b)=>b[1]-a[1]).find(([k])=>NEW_ARRIVALS[k]);
+  return top?NEW_ARRIVALS[top[0]]:NEW_ARRIVALS["手袋"];
+}
+function buildOpeners(c,s){
+  const first=c.name.replace(/^(Grace|Vivian|Karen|Mia)\s?/,"")||c.name;
+  const honor=c.tier==="VIC"?"":"";
+  const past=c.items[0], arrival=relevantArrival(c);
+  const dormant=s.dormant;
+  const A = dormant>=90
+    ? `${c.name}，好久没联系啦，最近好吗？前阵子整理到你之前入手的${past?past.n:"那几件"}，一直觉得特别适合你。这两天新到了「${arrival}」，风格和你一贯的品味很搭，先拍两张给你看看，喜欢我再帮你留。`
+    : `${c.name}，最近新到了「${arrival}」，我第一时间想到你——和你之前的${past?past.n:"选择"}是一个调性。不着急，你有空我发几张细节图给你参考。`;
+  const B = `${c.name}，这季店里主推的「${arrival}」到了，尺寸和颜色都还齐。你之前偏爱${Object.entries(c.cat).sort((x,y)=>y[1]-x[1])[0][0]}这类，正好有一款我觉得很衬你。要不要我先帮你预留、你方便时过来看看实物？`;
+  return [{tone:"重连 · 低压力",text:A},{tone:"由头 · 新品切入",text:B}];
+}
+function factHooks(c,s){
+  const arr=[];
+  if(c.items[0]) arr.push(`历史购买：${c.items.map(i=>`${i.n}（${i.s}）`).join("、")}`);
+  arr.push(`本季主推「${relevantArrival(c)}」，属其偏好品类 → 相关性 ${s.relevance} 分`);
+  arr.push(`距上次主动联系 ${s.dormant} 天；距上次购买 ${c.lastBuy} 天`);
+  const extra=c.sig.find(x=>/生日|活动|搬家|升任|出席/.test(x));
+  if(extra) arr.push(`情境信号：${extra}`);
+  return arr;
+}
+function emotionGuide(c){
+  const g=[dialect(c.city)];
+  const personal=c.sig.find(x=>/生日|搬家|升任|出席|活动/.test(x));
+  if(personal) g.push(`可自然提一句你们聊过的近况：「${personal}」`);
+  g.push("先给情绪价值、再谈产品；首条消息不要逼单");
+  g.push("按你和 TA 真实的关系温度调节称呼与语气");
+  return g;
+}
+
+/* ============================ 渲染 ============================ */
+let SORT="priority", SELECTED=null;
+const enriched=CLIENTS.map(c=>({c,s:score(c)}));
+
+function renderStats(){
+  const hot=enriched.filter(e=>e.s.seg==="hot").length;
+  const dormant=enriched.filter(e=>e.s.dormant>=90).length;
+  const avgP=Math.round(enriched.reduce((a,e)=>a+e.s.priority,0)/enriched.length);
+  const thin=enriched.filter(e=>e.s.seg==="thin").length;
+  const cards=[
+    {k:"客户簿总数",v:enriched.length,sub:"",s:"var(--slate)"},
+    {k:"🔥 沉睡高潜（今日机会）",v:hot,sub:"高潜力 + 90 天未联系",s:"var(--ember)"},
+    {k:"待重连（90 天+ 沉默）",v:dormant,sub:"约 "+Math.round(dormant/enriched.length*100)+"% 客户簿",s:"var(--accent)"},
+    {k:"综合优先级均值",v:avgP,sub:"满分 100",s:"var(--sage)"},
+  ];
+  document.getElementById("stats").innerHTML=cards.map(c=>
+    `<div class="stat" style="--s:${c.s}"><div class="k">${c.k}</div><div class="v num">${c.v}${c.sub?` <small>${c.sub}</small>`:""}</div></div>`).join("");
+}
+
+function sortKey(e){
+  if(SORT==="potential") return e.s.potential;
+  if(SORT==="dormant") return e.s.dormant;
+  return e.s.priority;
+}
+function renderQueue(){
+  const list=[...enriched].sort((a,b)=>sortKey(b)-sortKey(a));
+  document.getElementById("queue").innerHTML=list.map((e,i)=>{
+    const {c,s}=e, seg=SEG[s.seg];
+    return `<button class="card" data-id="${c.id}" aria-selected="${SELECTED===c.id}"
+      style="--seg:${seg.v};--seg-soft:${seg.soft}">
+      <div class="row1">
+        <span class="rank num">${i+1}</span>
+        <span class="ava">${c.name.replace(/^(Grace|Vivian|Karen|Mia)\s?/,"").slice(0,1)}</span>
+        <span class="who"><span class="nm">${c.name}
+          <span class="chip" style="background:${seg.soft};color:${seg.ink}">${s.seg==="hot"?"🔥 ":""}${seg.label}</span></span>
+          <span class="sub">${c.city} · ${c.tier} · 消费 ¥${(c.spend/10000).toFixed(1)}万 · ${c.count} 单</span></span>
+        <span class="score"><span class="big num">${s.priority}</span><span class="lbl">优先级</span></span>
+      </div>
+      <div class="why" style="--seg:${seg.v};--seg-soft:${seg.soft}">${whyNow(c,s)}</div>
+      <div class="bars">
+        ${bar("p","潜力",s.potential)}${bar("r","匹配",s.relevance)}${bar("c","置信",s.confidence)}
+      </div>
+    </button>`;
+  }).join("");
+  document.querySelectorAll(".card").forEach(el=>el.onclick=()=>select(+el.dataset.id));
+}
+function bar(cls,lbl,v){return `<div class="bar ${cls}"><div class="bl"><span>${lbl}</span><span class="num">${v}</span></div>
+  <div class="track"><div class="fill" style="width:${v}%"></div></div></div>`;}
+
+function select(id){
+  SELECTED=id;
+  renderQueue();
+  const {c,s}=enriched.find(e=>e.c.id===id);
+  const seg=SEG[s.seg];
+  document.getElementById("empty").hidden=true;
+  const d=document.getElementById("detail");d.hidden=false;
+  const topCat=Object.entries(c.cat).sort((a,b)=>b[1]-a[1]);
+  d.innerHTML=`<div class="dcard">
+    <div class="dhead">
+      <span class="ava" style="background:${seg.v}">${c.name.replace(/^(Grace|Vivian|Karen|Mia)\s?/,"").slice(0,1)}</span>
+      <div style="flex:1">
+        <h2>${c.name}</h2>
+        <div class="meta">${c.city} · ${c.tier} · 客户簿排名信号见下</div>
+        <div class="seg"><span class="chip" style="background:${seg.soft};color:${seg.ink}">${s.seg==="hot"?"🔥 ":""}${seg.label}</span>
+          <span class="chip" style="background:var(--surface-2);color:var(--muted)">综合优先级 ${s.priority}</span></div>
+      </div>
+    </div>
+    <div class="facts">
+      <div class="fact"><div class="k">生命周期消费</div><div class="v num">¥${(c.spend/10000).toFixed(1)}万</div></div>
+      <div class="fact"><div class="k">购买次数</div><div class="v num">${c.count} 单</div></div>
+      <div class="fact"><div class="k">距上次购买</div><div class="v num">${c.lastBuy} 天</div></div>
+      <div class="fact"><div class="k">距上次联系</div><div class="v num" style="color:${s.dormant>=90?'var(--ember)':'inherit'}">${c.lastContact} 天</div></div>
+      <div class="fact" style="grid-column:1/-1"><div class="k">品类偏好</div>
+        <div class="taglist">${topCat.filter(([,w])=>w>0).map(([k,w])=>`<span class="tag"><b>${k}</b> ${Math.round(w*100)}%</span>`).join("")}</div></div>
+      <div class="fact" style="grid-column:1/-1"><div class="k">情境信号</div>
+        <div class="taglist">${c.sig.map(x=>`<span class="tag">${x}</span>`).join("")}</div></div>
+    </div>
+    <div class="gen">
+      <div class="gen-head"><h3>个性化开场白</h3>
+        <div style="display:flex;gap:8px">
+          <button class="btn ghost" id="regen" hidden>重生成</button>
+          <button class="btn" id="genBtn">✦ 生成开场白</button>
+        </div>
+      </div>
+      <div id="genOut"><p style="color:var(--muted);font-size:13px">点击生成 —— AI 会基于 ${c.name} 的结构化数据，产出可直接编辑发送的开场白，并标注哪些是 AI 的事实钩子、哪些留给你做情感表达。</p></div>
+    </div>
+  </div>`;
+  document.getElementById("genBtn").onclick=()=>generate(c,s);
+  document.getElementById("regen").onclick=()=>generate(c,s);
+}
+
+async function generate(c,s){
+  const out=document.getElementById("genOut");
+  const btn=document.getElementById("genBtn");
+  btn.disabled=true;
+  let result=null, live=false;
+  const useLive=localStorage.getItem("live")==="1"&&localStorage.getItem("apiKey");
+  if(useLive){
+    btn.textContent="Claude 生成中…";
+    try{result=await callClaude(c,s);live=true;}catch(err){result=null;}
+  }
+  if(!result){
+    // 内置引擎
+    result={openers:buildOpeners(c,s),facts:factHooks(c,s),emo:emotionGuide(c)};
+  }
+  btn.disabled=false;btn.textContent="✦ 生成开场白";
+  document.getElementById("regen").hidden=false;
+  out.innerHTML=`
+    ${result.openers.map((o,i)=>`
+      <div class="opener">
+        <div class="ot"><span class="lbl">✦ 开场白 ${String.fromCharCode(65+i)} · ${o.tone||""}</span>
+          <button class="copy" data-i="${i}">复制</button></div>
+        <textarea rows="3">${o.text}</textarea>
+      </div>`).join("")}
+    <div class="split">
+      <div class="lane ai"><h4>🟦 AI 负责 · 事实钩子</h4><ul>${result.facts.map(f=>`<li>${f}</li>`).join("")}</ul></div>
+      <div class="lane sa"><h4>🟨 留给你 · 情感表达</h4><ul>${result.emo.map(f=>`<li>${f}</li>`).join("")}</ul></div>
+    </div>
+    <div class="badge-note">● <span>${live?"由 Claude 实时生成":"由内置话术引擎生成（可在 ⚙ 接入 Claude 实时生成）"} · AI 只做事实与由头，情感表达与最终发送权始终在你手里。</span></div>`;
+  out.querySelectorAll(".copy").forEach(b=>b.onclick=()=>{
+    const t=out.querySelectorAll("textarea")[+b.dataset.i];
+    navigator.clipboard&&navigator.clipboard.writeText(t.value);
+    b.textContent="已复制 ✓";setTimeout(()=>b.textContent="复制",1400);
+  });
+}
+
+async function callClaude(c,s){
+  const key=localStorage.getItem("apiKey");
+  const model=localStorage.getItem("model")||"claude-sonnet-5";
+  const sys=`你是奢侈品行业的 clienteling 话术助手，服务中国市场的 SA（销售顾问）。铁律：
+1) AI 只负责"事实钩子"（客户买过什么、新品/活动、尺寸颜色、距上次联系天数）；情感表达和关系温度留给 SA，不要替 SA 把话说满、不要显得像"专家"。
+2) 话术必须像真人、口语化、本地化、非官方模板；避免营销腔和逼单。
+3) 首条消息目标是"让客户愿意回复"，给情绪价值优先于推销。
+只返回 JSON：{"openers":[{"tone":"简短标签","text":"开场白"},{"tone":"","text":""}],"facts":["事实钩子..."],"emo":["给SA的情感表达提示..."]}`;
+  const profile={姓名:c.name,城市:c.city,层级:c.tier,生命周期消费:c.spend,购买次数:c.count,
+    距上次购买天数:c.lastBuy,距上次联系天数:c.lastContact,品类偏好:c.cat,历史购买:c.items,情境信号:c.sig,
+    本季主推:relevantArrival(c),三维打分:{潜力:s.potential,匹配:s.relevance,置信:s.confidence}};
+  const res=await fetch("https://api.anthropic.com/v1/messages",{
+    method:"POST",headers:{"content-type":"application/json","x-api-key":key,
+      "anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
+    body:JSON.stringify({model,max_tokens:1024,system:sys,
+      messages:[{role:"user",content:"为这位客户生成两条开场白，客户数据："+JSON.stringify(profile)}]})
+  });
+  if(!res.ok) throw new Error("api");
+  const data=await res.json();
+  const txt=data.content.map(b=>b.text||"").join("");
+  const j=JSON.parse(txt.slice(txt.indexOf("{"),txt.lastIndexOf("}")+1));
+  return {openers:j.openers,facts:j.facts,emo:j.emo};
+}
+
+/* ============================ 交互 ============================ */
+document.getElementById("sort").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+  SORT=b.dataset.k;
+  document.querySelectorAll("#sort button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  renderQueue();
+});
+// 设置面板
+const modal=document.getElementById("modal");
+function openSet(){
+  document.getElementById("apiKey").value=localStorage.getItem("apiKey")||"";
+  document.getElementById("model").value=localStorage.getItem("model")||"claude-sonnet-5";
+  document.getElementById("liveSwitch").setAttribute("aria-checked",localStorage.getItem("live")==="1");
+  modal.dataset.open="true";
+}
+document.getElementById("setBtn").onclick=openSet;
+document.getElementById("closeSet").onclick=()=>modal.dataset.open="false";
+modal.onclick=e=>{if(e.target===modal)modal.dataset.open="false";};
+document.getElementById("liveSwitch").onclick=function(){
+  this.setAttribute("aria-checked",this.getAttribute("aria-checked")!=="true");
+};
+document.getElementById("saveSet").onclick=()=>{
+  localStorage.setItem("apiKey",document.getElementById("apiKey").value.trim());
+  localStorage.setItem("model",document.getElementById("model").value);
+  localStorage.setItem("live",document.getElementById("liveSwitch").getAttribute("aria-checked")==="true"?"1":"0");
+  modal.dataset.open="false";
+};
+// 主题切换
+const themeBtn=document.getElementById("themeBtn");
+themeBtn.onclick=()=>{
+  const cur=document.documentElement.getAttribute("data-theme");
+  const next=cur==="dark"?"light":cur==="light"?"dark":(matchMedia("(prefers-color-scheme:dark)").matches?"light":"dark");
+  document.documentElement.setAttribute("data-theme",next);
+};
+document.getElementById("aboutLink").onclick=()=>{
+  alert("这个 MVP 验证两件事：\n\n① 用「潜力 × 匹配 × 置信」三维排序，能不能比 SA「看心情」的名单更准（当前误判率约 80%）。\n\n② AI 基于结构化数据生成的开场白，能不能把「写话术」这个最耗人力的环节从约 10 分钟降到近乎零，且质量不输 top sales。\n\nAI 管事实，SA 管情感。发送权始终在人手里。");
+};
+
+/* init */
+try{
+  renderStats();renderQueue();
+  // 默认选中排第一的沉睡高潜客户，讲好故事
+  const first=[...enriched].sort((a,b)=>b.s.priority-a.s.priority)[0];
+  select(first.c.id);
+}catch(e){document.getElementById("queue").innerHTML="<p>初始化出错："+e.message+"</p>";}
+</script>
+
+</body>
+</html>
