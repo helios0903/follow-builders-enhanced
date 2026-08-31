@@ -1,0 +1,284 @@
+<title>外联副驾提案</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@500;600;700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap">
+<style>
+  :root{
+    --ground:#F3F1EC; --paper:#FBFAF7; --surface:#FFFFFF; --line:#DED8CE; --line-2:#E9E4DB;
+    --ink:#201D1B; --muted:#6A645C; --faint:#948C82;
+    --accent:#8B3A42; --accent-ink:#6E2C33; --accent-soft:#F1E3E3;
+    --ember:#9A6412; --ember-soft:#F6ECD9;
+    --sage:#4F6B4A; --sage-soft:#E6EBE0;
+    --serif:"Noto Serif SC",Georgia,"Songti SC",serif;
+    --sans:"Noto Sans SC",-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;
+    --shadow:0 1px 2px rgba(32,29,27,.05),0 10px 30px rgba(32,29,27,.07);
+  }
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+    --ground:#15120F; --paper:#1C1916; --surface:#221E1B; --line:#38322C; --line-2:#2C2723;
+    --ink:#ECE7E0; --muted:#A79E93; --faint:#7C7469;
+    --accent:#D08A93; --accent-ink:#E7B2B8; --accent-soft:#38242700;
+    --ember:#D6A24E; --ember-soft:#33290F;
+    --sage:#94B189; --sage-soft:#232C1D;
+    --shadow:0 1px 2px rgba(0,0,0,.35),0 12px 34px rgba(0,0,0,.45);
+  }}
+  :root[data-theme="dark"]{
+    --ground:#15120F; --paper:#1C1916; --surface:#221E1B; --line:#38322C; --line-2:#2C2723;
+    --ink:#ECE7E0; --muted:#A79E93; --faint:#7C7469;
+    --accent:#D08A93; --accent-ink:#E7B2B8; --accent-soft:#382427;
+    --ember:#D6A24E; --ember-soft:#33290F;
+    --sage:#94B189; --sage-soft:#232C1D;
+    --shadow:0 1px 2px rgba(0,0,0,.35),0 12px 34px rgba(0,0,0,.45);
+  }
+  *{box-sizing:border-box}
+  body{background:var(--ground);color:var(--ink);font-family:var(--sans);line-height:1.62;-webkit-font-smoothing:antialiased}
+  .num{font-variant-numeric:tabular-nums}
+  h1,h2,h3{font-family:var(--serif);line-height:1.2;text-wrap:balance;margin:0;font-weight:700}
+  .eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:700}
+  .eyebrow.mut{color:var(--faint)}
+
+  /* sheet */
+  .sheet{max-width:840px;margin:26px auto;background:var(--paper);border:1px solid var(--line);
+    box-shadow:var(--shadow);position:relative;overflow:hidden}
+  .sheet::before{content:"";position:absolute;top:0;left:0;right:0;height:5px;
+    background:linear-gradient(90deg,var(--accent) 0 62%,var(--ember) 62% 82%,var(--sage) 82% 100%)}
+  .pad{padding:44px clamp(24px,5vw,60px)}
+  section{border-top:1px solid var(--line-2)}
+  @media print{body{background:#fff}.sheet{box-shadow:none;margin:0;border:none;max-width:none}.noprint{display:none!important}}
+
+  /* dossier header */
+  .doc-top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;
+    font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);padding-bottom:26px}
+  .doc-top .r{text-align:right}
+  .hero h1{font-size:clamp(28px,5.2vw,46px);letter-spacing:-.01em}
+  .hero h1 .hl{color:var(--accent)}
+  .hero .sub{font-size:clamp(15px,2vw,18px);color:var(--muted);margin-top:16px;max-width:60ch}
+  .hero .kicker{font-family:var(--serif);font-size:clamp(16px,2.4vw,21px);font-weight:600;margin-top:22px;
+    padding-left:16px;border-left:3px solid var(--accent);color:var(--ink)}
+
+  h2.st{font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:20px;font-family:var(--sans)}
+  .lead{font-family:var(--serif);font-size:clamp(19px,2.6vw,25px);font-weight:600;line-height:1.4}
+  .body{font-size:15px;color:var(--muted);margin-top:14px;max-width:64ch}
+  .body b{color:var(--ink)}
+
+  /* problem stats */
+  .stats3{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--line-2);
+    border:1px solid var(--line-2);margin-top:8px}
+  @media(max-width:640px){.stats3{grid-template-columns:1fr}}
+  .st3{background:var(--paper);padding:22px 20px}
+  .st3 .big{font-family:var(--serif);font-size:44px;font-weight:900;line-height:1;color:var(--accent)}
+  .st3 .big .u{font-size:20px;font-weight:700}
+  .st3 .cap{font-weight:700;font-size:14px;margin-top:10px}
+  .st3 .src{font-size:12px;color:var(--faint);margin-top:5px}
+
+  /* insight callout */
+  .insight{background:var(--accent);color:#fff;border-radius:0}
+  .insight .pad{padding-top:40px;padding-bottom:40px}
+  .insight .eyebrow{color:#F1CDCD}
+  .insight h2{font-size:clamp(21px,3.2vw,30px);color:#fff;margin-top:12px}
+  .insight p{color:#F4E4E4;font-size:15px;margin-top:14px;max-width:62ch}
+  :root[data-theme="dark"] .insight,:root:not([data-theme="light"]) .insight{color:#1A1210}
+  @media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .insight h2{color:#1A1210}
+    :root:not([data-theme="light"]) .insight p{color:#3a2224}:root:not([data-theme="light"]) .insight .eyebrow{color:#7d3a3f}}
+  :root[data-theme="dark"] .insight h2{color:#1A1210}:root[data-theme="dark"] .insight p{color:#3a2224}:root[data-theme="dark"] .insight .eyebrow{color:#7d3a3f}
+
+  /* solution diagram */
+  .diagram{display:flex;flex-direction:column;align-items:center;gap:14px;margin-top:8px}
+  .doors{display:flex;gap:12px;flex-wrap:wrap;justify-content:center;width:100%}
+  .door{flex:1;min-width:170px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .door .t{font-weight:700;font-size:14px;color:var(--accent)}
+  .door .d{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .arrow{color:var(--faint);font-size:20px;line-height:1}
+  .engine{width:100%;background:var(--ink);color:var(--paper);border-radius:12px;padding:18px 20px;text-align:center}
+  .engine .t{font-family:var(--serif);font-weight:700;font-size:18px}
+  .engine .d{font-size:13px;opacity:.82;margin-top:4px}
+  .outs{display:flex;gap:12px;width:100%;flex-wrap:wrap}
+  .out{flex:1;min-width:200px;border:1px solid var(--line);border-radius:12px;padding:14px 16px;background:var(--surface)}
+  .out .t{font-weight:700;font-size:14px}
+  .out.ai .t{color:var(--sage)} .out.sa .t{color:var(--accent)}
+  .out .d{font-size:12.5px;color:var(--muted);margin-top:3px}
+  .divider-role{display:flex;align-items:center;gap:10px;margin-top:22px;font-size:13.5px;color:var(--muted);
+    background:var(--sage-soft);border:1px solid color-mix(in srgb,var(--sage) 26%,transparent);border-radius:10px;padding:12px 15px}
+  .divider-role b{color:var(--ink)}
+
+  /* why now */
+  .rows{display:flex;flex-direction:column;gap:0;margin-top:4px}
+  .rw{display:flex;gap:16px;padding:15px 0;border-top:1px solid var(--line-2)}
+  .rw:first-child{border-top:none}
+  .rw .ic{font-size:18px;flex:none;width:26px;text-align:center}
+  .rw .tx b{color:var(--ink)} .rw .tx{font-size:14.5px;color:var(--muted)}
+
+  /* prototype band */
+  .proto{background:var(--surface)}
+  .proto .box{display:flex;gap:22px;align-items:center;flex-wrap:wrap}
+  .proto .info{flex:1;min-width:260px}
+  .chips{display:flex;flex-wrap:wrap;gap:7px;margin-top:14px}
+  .pchip{font-size:12px;font-weight:600;padding:4px 11px;border-radius:999px;background:var(--accent-soft);color:var(--accent-ink);border:1px solid color-mix(in srgb,var(--accent) 22%,transparent)}
+  .cta{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;font-weight:700;font-size:14px;
+    padding:11px 20px;border-radius:10px;text-decoration:none;margin-top:18px;box-shadow:var(--shadow)}
+
+  /* roadmap */
+  .road{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:6px;counter-reset:ph}
+  @media(max-width:640px){.road{grid-template-columns:1fr}}
+  .ph{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:16px 17px;position:relative}
+  .ph .p{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);font-weight:700}
+  .ph .h{font-family:var(--serif);font-weight:700;font-size:16px;margin-top:5px}
+  .ph .d{font-size:13px;color:var(--muted);margin-top:6px}
+  .ph.now{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent)}
+  .ph.now .p{color:var(--accent)}
+
+  /* validation */
+  .valid{display:flex;flex-direction:column;gap:10px;margin-top:6px}
+  .vstep{display:flex;gap:14px;align-items:baseline}
+  .vstep .n{font-family:var(--serif);font-weight:900;font-size:20px;color:var(--accent);flex:none;width:28px}
+  .vstep .t{font-size:14.5px;color:var(--muted)} .vstep .t b{color:var(--ink)}
+  .kpi{display:flex;gap:10px;flex-wrap:wrap;margin-top:16px}
+  .kpibox{flex:1;min-width:180px;background:var(--ember-soft);border:1px solid color-mix(in srgb,var(--ember) 26%,transparent);border-radius:10px;padding:13px 15px}
+  .kpibox .k{font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ember);font-weight:700}
+  .kpibox .v{font-size:14px;margin-top:4px}
+
+  /* ask */
+  .ask{background:var(--ink);color:var(--paper)}
+  .ask .eyebrow{color:var(--ember)}
+  .ask h2{color:var(--paper);font-size:clamp(20px,3vw,28px);margin-top:12px}
+  .ask ul{list-style:none;padding:0;margin:18px 0 0;display:flex;flex-direction:column;gap:11px}
+  .ask li{display:flex;gap:11px;font-size:15px;color:#E6E0D8}
+  .ask li::before{content:"→";color:var(--ember);font-weight:700;flex:none}
+  .ask .close{font-family:var(--serif);font-size:17px;font-weight:600;color:var(--paper);margin-top:24px;line-height:1.5}
+  .foot{max-width:840px;margin:0 auto 40px;padding:14px 12px;font-size:11.5px;color:var(--faint);text-align:center}
+  .toolbar{max-width:840px;margin:16px auto 0;display:flex;justify-content:flex-end;gap:8px}
+  .tbtn{font-size:12.5px;color:var(--muted);background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 13px;cursor:pointer}
+  .tbtn:hover{border-color:var(--accent);color:var(--accent)}
+</style>
+
+<div class="toolbar noprint">
+  <button class="tbtn" id="themeBtn">◐ 深/浅色</button>
+  <button class="tbtn" onclick="window.print()">⎙ 打印 / 存 PDF</button>
+</div>
+
+<div class="sheet">
+  <!-- HERO -->
+  <div class="pad hero">
+    <div class="doc-top">
+      <div>机密 · 试点提案<br>Clienteling · Pilot Proposal</div>
+      <div class="r">奢侈品零售 AI · 2026<br>Doc. SA-COPILOT / v1</div>
+    </div>
+    <p class="eyebrow">给决策层与合伙人</p>
+    <h1>销售最贵的时间，花在了<span class="hl">"联系谁"和"怎么开口"</span>上。</h1>
+    <p class="sub">不是内容不够，也不是造型不好。是一线销售每天在一份看不懂的名单前凭感觉挑人，再花最多的力气把官方话术改得像人话。这两件事，正是 AI 现在能做、而且能立刻见效的地方。</p>
+    <p class="kicker">一套引擎，三个入口：告诉销售今天先联系谁、这个产品推给谁、跟这位客人说什么。<br>AI 负责事实，销售负责情感。</p>
+  </div>
+
+  <!-- PROBLEM -->
+  <section><div class="pad">
+    <h2 class="st">01 · 问题：营收正从指缝里漏走</h2>
+    <p class="lead">高潜力的客户被冷落，不是因为没价值，而是因为销售没有依据、没有精力去够到他们。</p>
+    <div class="stats3">
+      <div class="st3"><div class="big num">~80<span class="u">%</span></div><div class="cap">优先级判断误判率</div><div class="src">销售靠"看心情"挑客户 · 访谈估计（方向性）</div></div>
+      <div class="st3"><div class="big num">~40<span class="u">%</span></div><div class="cap">沉睡 / 低频客户几乎从不被触达</div><div class="src">被低估但真实的营收池 · 访谈估计</div></div>
+      <div class="st3"><div class="big num">~10<span class="u">%</span></div><div class="cap">外联到店转化基准</div><div class="src">每一分触达效率的提升都直接进营收</div></div>
+    </div>
+    <p class="body">销售外联分两步，第二步最耗人力：<b>① 从 CRM 单维度名单里挑人</b>（没有综合排序，凭感觉）；<b>② 逐句把官方话术改得有人情味、找到属于这个客户的破冰点</b>——这是整个沟通里"最 tedious"的一段。准备时间平均只有约 10 分钟，做不细，于是最难够到的高潜客户被一再跳过。</p>
+  </div></section>
+
+  <!-- INSIGHT -->
+  <section class="insight"><div class="pad">
+    <p class="eyebrow">02 · 关键洞察</p>
+    <h2>瓶颈不是"做内容"，是"够到人"。</h2>
+    <p>三场独立访谈得出同一个结论：官方造型素材"完全够用"。真正稀缺的，是<b>知道该联系谁、以及怎么开口才能得到回复</b>。所以我们刻意不做生图、不做造型——把力气全部压在这条最痛、也最能被验证的主线上。</p>
+  </div></section>
+
+  <!-- SOLUTION -->
+  <section><div class="pad">
+    <h2 class="st">03 · 方案：一个引擎，三个入口</h2>
+    <p class="lead">不是三个产品，是同一套"客户 × 产品/情境匹配 + 排序 + 话术"引擎的三种进入方式。</p>
+    <div class="diagram">
+      <div class="doors">
+        <div class="door"><div class="t">① 有产品要推</div><div class="d">"这个推给谁？"</div></div>
+        <div class="door"><div class="t">② 有客人要联系</div><div class="d">"跟 TA 说什么？"</div></div>
+        <div class="door"><div class="t">③ 现在有空</div><div class="d">"今天先联系谁？"</div></div>
+      </div>
+      <div class="arrow">↓</div>
+      <div class="engine"><div class="t">排序引擎 · 潜力 × 匹配 × 置信 + 趋势信号</div><div class="d">替代单维度 CRM 名单，每个客户附一句可解释的"为什么是他"</div></div>
+      <div class="arrow">↓</div>
+      <div class="outs">
+        <div class="out ai"><div class="t">🟦 AI 负责 · 事实</div><div class="d">买过什么、新品与尺码、趋势谈资、距上次联系多久</div></div>
+        <div class="out sa"><div class="t">🟨 销售负责 · 情感</div><div class="d">真人语气、方言、关系温度——最终发送权始终在销售手里</div></div>
+      </div>
+    </div>
+    <div class="divider-role">🛡️ <span><b>为什么销售不抵触：</b>AI 只把"该聊什么、事实对不对"做扎实，绝不替销售把话说满、装成"专家"。它过滤低价值劳动，让人专注高质量的情感沟通——是辅助，不是替代。</span></div>
+  </div></section>
+
+  <!-- WHY NOW -->
+  <section><div class="pad">
+    <h2 class="st">04 · 为什么是现在</h2>
+    <div class="rows">
+      <div class="rw"><div class="ic">📉</div><div class="tx"><b>生意承压 = 立项窗口。</b>客流下滑、营收吃紧，业绩压力反而让组织更愿意尝试提效工具。</div></div>
+      <div class="rw"><div class="ic">💬</div><div class="tx"><b>企业微信是唯一绕不开的通路。</b>三场访谈一致确认销售全部在企业微信上沟通——我们默认长在这个生态里。</div></div>
+      <div class="rw"><div class="ic">🏗️</div><div class="tx"><b>市场已被验证。</b>腾讯 AI 已在研究同类方案，证明需求真实存在；而我们用"只碰结构化数据、不碰高敏感数据"的设计，避开了对方难落地的合规雷区。</div></div>
+    </div>
+  </div></section>
+
+  <!-- PROTOTYPE -->
+  <section class="proto"><div class="pad">
+    <h2 class="st">05 · 我们已经把它造出来了（去风险）</h2>
+    <div class="box">
+      <div class="info">
+        <p class="lead" style="font-size:20px">一个可点、可玩的 Web 原型——用一个下午验证核心循环，而不是花几周做一个可能有缺陷的完整 App。</p>
+        <p class="body">先用 Web 高保真模拟器证明价值，再投资企业微信集成。原型已实现：三入口排序、产品重排、客户搜索、趋势推断、个性化话术生成（AI 事实 / 销售情感分栏）。</p>
+        <div class="chips">
+          <span class="pchip">三维排序 + 趋势信号</span><span class="pchip">三入口一套引擎</span>
+          <span class="pchip">冷启动趋势推断</span><span class="pchip">个性化话术生成</span><span class="pchip">只用结构化数据</span>
+        </div>
+        <a class="cta noprint" id="protoLink" href="https://claude.ai/code/artifact/a9ba05c3-e76a-4b71-8b73-65ac0c1fa179" target="_blank" rel="noopener">▶ 打开可交互原型</a>
+      </div>
+    </div>
+  </div></section>
+
+  <!-- VALIDATION -->
+  <section><div class="pad">
+    <h2 class="st">06 · 我们如何证明它有效</h2>
+    <p class="lead">用一个 4 周试点，让真实销售来判——而不是我们自说自话。</p>
+    <div class="valid">
+      <div class="vstep"><div class="n num">1</div><div class="t"><b>盲评排序：</b>让销售对同一批客户各自"凭直觉"排序，与引擎排序对比，量化优先级判断的改善（对标 ~80% 误判基准）。</div></div>
+      <div class="vstep"><div class="n num">2</div><div class="t"><b>话术 A/B：</b>一半外联用销售现有话术，一半用 AI 生成 + 销售润色，比较客户回复率与回复时长。</div></div>
+      <div class="vstep"><div class="n num">3</div><div class="t"><b>业务闭环：</b>追踪外联到店转化率相对 ~10% 基准的变化。</div></div>
+    </div>
+    <div class="kpi">
+      <div class="kpibox"><div class="k">主 KPI</div><div class="v">客户回复率 / 回复时长</div></div>
+      <div class="kpibox"><div class="k">业务 KPI</div><div class="v">外联到店转化率（vs ~10%）</div></div>
+      <div class="kpibox"><div class="k">效率 KPI</div><div class="v">单次外联准备时间（vs ~10 分钟）</div></div>
+    </div>
+  </div></section>
+
+  <!-- ROADMAP -->
+  <section><div class="pad">
+    <h2 class="st">07 · 路线图</h2>
+    <div class="road">
+      <div class="ph now"><div class="p">现在 · MVP</div><div class="h">Web 原型验证</div><div class="d">排序 + 话术 + 趋势推断，用模拟数据跑通核心循环。</div></div>
+      <div class="ph"><div class="p">Phase 1</div><div class="h">企业微信内嵌</div><div class="d">接入试点门店的结构化数据，长进销售真实工作流。</div></div>
+      <div class="ph"><div class="p">Phase 2 · 主航道</div><div class="h">算法深化</div><div class="d">相似客群建模、趋势预测、推荐精排——把排序与推断做成护城河。</div></div>
+    </div>
+  </div></section>
+
+  <!-- ASK -->
+  <section class="ask"><div class="pad">
+    <p class="eyebrow">08 · 我们请你拍板</p>
+    <h2>给我们一个 4 周试点。</h2>
+    <ul>
+      <li>指定 <b>1 家门店的 3–5 名销售</b>参与试点</li>
+      <li>开放<b>已有的结构化客户数据</b>（购买记录、CRM 字段）——不碰聊天记录、朋友圈、录音等高敏感数据</li>
+      <li>由 <b>Retail 负责人</b>做立项决策（这是决策权所在，不是 IT）</li>
+    </ul>
+    <p class="close">如果一个下午能造出的原型就能让销售更快够到高潜客户、更早收到回复——<br>那么值得用四周，把它变成真的。</p>
+  </div></section>
+</div>
+
+<p class="foot">高保真原型与所有数字均来自内部访谈综合（部分为方向性估计，试点将实测校准）。本提案仅供内部决策讨论。</p>
+
+<script>
+  document.getElementById("themeBtn").onclick=()=>{
+    const cur=document.documentElement.getAttribute("data-theme");
+    const next=cur==="dark"?"light":cur==="light"?"dark":(matchMedia("(prefers-color-scheme:dark)").matches?"light":"dark");
+    document.documentElement.setAttribute("data-theme",next);
+  };
+</script>
