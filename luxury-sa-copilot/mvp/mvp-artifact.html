@@ -42,9 +42,8 @@
   .num{font-variant-numeric:tabular-nums}
   .eyebrow{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);font-weight:700}
   button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
-  button:focus-visible,input:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+  button:focus-visible,input:focus-visible,select:focus-visible,[tabindex]:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
 
-  /* ---- top bar ---- */
   header.top{position:sticky;top:0;z-index:20;background:color-mix(in srgb,var(--ground) 88%,transparent);
     backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
   .top-in{max-width:1240px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
@@ -60,31 +59,40 @@
     display:grid;place-items:center;font-size:16px;box-shadow:var(--shadow)}
   .icon-btn:hover{border-color:var(--accent);color:var(--accent)}
 
-  /* ---- hero line ---- */
   .lede{padding:30px 0 18px}
   .lede h1{font-size:clamp(24px,3.4vw,34px)}
-  .lede p{max-width:60ch;color:var(--muted);margin:10px 0 0}
+  .lede p{max-width:62ch;color:var(--muted);margin:10px 0 0}
 
-  /* ---- summary strip ---- */
-  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:6px 0 26px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:6px 0 24px}
   .stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:15px 16px;box-shadow:var(--shadow);position:relative;overflow:hidden}
   .stat::before{content:"";position:absolute;left:0;top:0;bottom:0;width:3px;background:var(--s,var(--accent))}
   .stat .k{font-size:11px;color:var(--muted);letter-spacing:.03em}
   .stat .v{font-family:var(--serif);font-size:27px;font-weight:700;margin-top:2px}
   .stat .v small{font-size:13px;color:var(--faint);font-family:var(--sans);font-weight:400}
 
-  /* ---- main grid ---- */
+  /* mode tabs */
+  .modes{display:flex;gap:6px;margin-bottom:14px;flex-wrap:wrap}
+  .modes button{display:flex;flex-direction:column;gap:1px;align-items:flex-start;background:var(--surface);
+    border:1px solid var(--line);border-radius:11px;padding:9px 15px;box-shadow:var(--shadow);transition:border-color .12s;min-width:130px}
+  .modes button .mt{font-weight:700;font-size:13px}
+  .modes button .ms{font-size:11px;color:var(--faint)}
+  .modes button:hover{border-color:var(--accent)}
+  .modes button[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 1px var(--accent),var(--shadow)}
+  .modes button[aria-pressed="true"] .mt{color:var(--accent)}
+
   .grid{display:grid;grid-template-columns:minmax(360px,1fr) minmax(380px,1.15fr);gap:22px;align-items:start}
   @media(max-width:900px){.grid{grid-template-columns:1fr}.stats{grid-template-columns:repeat(2,1fr)}}
 
-  .panel-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px}
+  .panel-h{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;gap:10px;min-height:34px}
   .panel-h h2{font-size:16px}
-  .panel-h .hint{font-size:12px;color:var(--faint)}
+  .ctrl-note{font-size:12px;color:var(--faint);max-width:52ch}
   .sort{display:flex;gap:4px;background:var(--surface-2);padding:3px;border-radius:9px;border:1px solid var(--line)}
-  .sort button{font-size:12px;padding:4px 10px;border-radius:6px;color:var(--muted);font-weight:500}
+  .sort button{font-size:12px;padding:4px 10px;border-radius:6px;color:var(--muted);font-weight:500;white-space:nowrap}
   .sort button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:var(--shadow)}
+  .fld{padding:8px 12px;border:1px solid var(--line);border-radius:9px;background:var(--surface);color:var(--ink);font-family:inherit;font-size:13px}
+  select.fld{max-width:240px}
+  input.search{width:100%}
 
-  /* ---- queue ---- */
   .queue{display:flex;flex-direction:column;gap:10px}
   .card{position:relative;text-align:left;width:100%;background:var(--surface);border:1px solid var(--line);
     border-radius:var(--r);padding:14px 15px 14px 17px;box-shadow:var(--shadow);transition:transform .12s,border-color .12s;display:block}
@@ -96,7 +104,7 @@
   .ava{width:38px;height:38px;border-radius:50%;flex:none;display:grid;place-items:center;font-family:var(--serif);
     font-weight:700;font-size:15px;color:#fff;background:var(--accent)}
   .who{flex:1;min-width:0}
-  .who .nm{font-weight:700;font-size:14.5px;display:flex;align-items:center;gap:7px}
+  .who .nm{font-weight:700;font-size:14.5px;display:flex;align-items:center;gap:7px;flex-wrap:wrap}
   .who .sub{font-size:11.5px;color:var(--muted)}
   .score{text-align:right;flex:none}
   .score .big{font-family:var(--serif);font-weight:700;font-size:22px;line-height:1}
@@ -111,8 +119,8 @@
   .bar .track{height:4px;background:var(--surface-2);border-radius:3px;margin-top:3px;overflow:hidden}
   .bar .fill{height:100%;border-radius:3px;background:var(--slate)}
   .bar.p .fill{background:var(--accent)} .bar.r .fill{background:var(--ember)} .bar.c .fill{background:var(--sage)}
+  .emptyq{background:var(--surface);border:1px dashed var(--line);border-radius:var(--r);padding:34px;text-align:center;color:var(--muted);font-size:13px}
 
-  /* ---- dossier ---- */
   .dossier{position:sticky;top:78px}
   .empty{background:var(--surface);border:1px dashed var(--line);border-radius:var(--r);padding:56px 30px;text-align:center;color:var(--muted)}
   .empty .g{font-size:30px;margin-bottom:8px}
@@ -121,7 +129,7 @@
   .dhead .ava{width:52px;height:52px;font-size:20px}
   .dhead h2{font-size:21px}
   .dhead .meta{font-size:12.5px;color:var(--muted);margin-top:3px}
-  .dhead .seg{margin-top:8px}
+  .dhead .seg{margin-top:8px;display:flex;gap:6px;flex-wrap:wrap}
   .facts{padding:18px 22px;display:grid;grid-template-columns:1fr 1fr;gap:14px 18px;border-bottom:1px solid var(--line)}
   .fact .k{font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--faint);font-weight:700}
   .fact .v{font-size:14px;margin-top:2px}
@@ -129,6 +137,15 @@
   .taglist{display:flex;flex-wrap:wrap;gap:6px;margin-top:5px}
   .tag{font-size:11px;padding:2px 9px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);color:var(--muted)}
   .tag b{color:var(--ink)}
+  .trend{grid-column:1/-1;background:var(--ember-soft);border:1px solid color-mix(in srgb,var(--ember) 28%,transparent);
+    border-radius:var(--r-sm);padding:11px 13px}
+  .trend .k{color:var(--ember)}
+  .trend .tv{font-size:12.5px;margin-top:3px;color:var(--ink)}
+  .infer{grid-column:1/-1;background:var(--slate-soft);border:1px dashed color-mix(in srgb,var(--slate) 45%,transparent);
+    border-radius:var(--r-sm);padding:11px 13px}
+  .infer .k{color:var(--slate)}
+  .infer .tv{font-size:12.5px;margin-top:3px}
+  .infer .src{font-size:11px;color:var(--faint);margin-top:5px}
 
   .gen{padding:18px 22px 22px}
   .gen-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:14px}
@@ -142,7 +159,6 @@
   .opener{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm);padding:0;margin-bottom:12px;overflow:hidden}
   .opener .ot{display:flex;align-items:center;justify-content:space-between;padding:9px 14px;border-bottom:1px solid var(--line);background:var(--surface)}
   .opener .ot .lbl{font-size:11px;font-weight:700;letter-spacing:.04em;color:var(--muted);display:flex;align-items:center;gap:7px}
-  .opener .ot .tone{font-size:10.5px;color:var(--faint)}
   .opener textarea{width:100%;border:none;background:transparent;color:var(--ink);font-family:var(--sans);
     font-size:14px;line-height:1.7;padding:13px 15px;resize:vertical;min-height:84px}
   .copy{font-size:11.5px;color:var(--accent);font-weight:700;padding:3px 8px}
@@ -158,10 +174,8 @@
   .lane ul{margin:0;padding-left:0;list-style:none;display:flex;flex-direction:column;gap:7px}
   .lane li{font-size:12.5px;line-height:1.5;display:flex;gap:7px;color:var(--ink)}
   .lane li::before{content:"";flex:none;width:5px;height:5px;border-radius:50%;margin-top:7px;background:currentColor;opacity:.55}
-  .lane.ai li{color:var(--ink)}
   .badge-note{font-size:11px;color:var(--faint);margin-top:10px;display:flex;gap:6px;align-items:baseline}
 
-  /* ---- settings ---- */
   .modal{position:fixed;inset:0;z-index:40;display:none;place-items:center;background:rgba(20,17,15,.5);padding:20px}
   .modal[data-open="true"]{display:grid}
   .sheet{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);max-width:440px;width:100%;box-shadow:var(--shadow);overflow:hidden}
@@ -186,8 +200,8 @@
       <span class="mark">SA <b>外联副驾</b></span>
       <small>Clienteling Copilot · MVP</small>
     </div>
-    <div class="campaign" title="当前主推 campaign（影响 Relevance 打分）">
-      <span class="dot"></span><span>本周主推 · <b>秋冬新季 · 结构廓形手袋</b></span>
+    <div class="campaign" id="campaignChip" title="当前情境（影响 Relevance 打分）">
+      <span class="dot"></span><span id="campaignTxt"></span>
     </div>
     <button class="icon-btn" id="themeBtn" title="切换深浅色" aria-label="切换深浅色">◐</button>
     <button class="icon-btn" id="setBtn" title="设置 · 接入 Claude" aria-label="设置">⚙</button>
@@ -196,22 +210,24 @@
 
 <div class="wrap">
   <div class="lede">
-    <p class="eyebrow">今日外联 · 决定先联系谁 + 怎么开口</p>
-    <h1>今天，这 14 位客户里谁值得你花时间？</h1>
-    <p>系统按 <b>潜力 × 匹配 × 置信</b> 三维排序，替代单维度 CRM 名单；对选中的客户，AI 负责事实钩子，把情感表达留给你。</p>
+    <p class="eyebrow">一个引擎 · 三个入口 · 决定联系谁 + 怎么开口</p>
+    <h1 id="lh">今天，这 14 位客户里谁值得你花时间？</h1>
+    <p id="lp">系统按 <b>潜力 × 匹配 × 置信</b> 三维排序（叠加趋势信号）；对选中客户，AI 负责事实钩子与谈资，把情感表达留给你。</p>
   </div>
 
   <div class="stats" id="stats"></div>
 
+  <div class="modes" id="modes" role="group" aria-label="使用场景">
+    <button data-m="idle" aria-pressed="true"><span class="mt">③ 空闲 · 联系谁</span><span class="ms">我现在有空，找人邀约</span></button>
+    <button data-m="product" aria-pressed="false"><span class="mt">① 产品 · 推给谁</span><span class="ms">我有一款产品要推</span></button>
+    <button data-m="client" aria-pressed="false"><span class="mt">② 客人 · 说什么</span><span class="ms">我心里已有一个客户</span></button>
+  </div>
+
   <div class="grid">
     <section aria-label="客户队列">
       <div class="panel-h">
-        <h2>今日优先队列</h2>
-        <div class="sort" id="sort" role="group" aria-label="排序方式">
-          <button data-k="priority" aria-pressed="true">综合优先级</button>
-          <button data-k="potential" aria-pressed="false">潜力</button>
-          <button data-k="dormant" aria-pressed="false">沉睡天数</button>
-        </div>
+        <h2 id="queueTitle">今日优先队列</h2>
+        <div id="modeCtrl"></div>
       </div>
       <div class="queue" id="queue"></div>
     </section>
@@ -225,7 +241,7 @@
     </section>
   </div>
 
-  <p class="foot">高保真模拟器 · 数据为虚构演示数据，用于验证「AI 排序 + AI 话术」的核心价值 —— 详见 product brief。<br>
+  <p class="foot">高保真模拟器 · 数据（含趋势信号）为虚构演示数据，用于验证「AI 排序 + 趋势推断 + AI 话术」的核心价值 —— 详见 product brief。<br>
   <a id="aboutLink" href="#" onclick="return false">MVP 会验证什么？</a></p>
 </div>
 
@@ -257,10 +273,25 @@
 
 <script>
 /* ============================ 模拟客户簿 ============================ */
-/* 字段按未来真实 CRM 字段设计，便于日后替换数据源 */
 const CATS=["手袋","成衣","珠宝","鞋履","腕表"];
-const FOCUS={"手袋":0.7,"成衣":0.3};      // 本周主推 campaign 的品类权重
-const NEW_ARRIVALS={"手袋":"结构廓形 Tote（秋冬新季）","成衣":"羊绒双面呢大衣"};
+/* 趋势智能层（模拟）：品类热度 + 一句可解释的趋势由来 */
+const TRENDS={
+  手袋:{hot:.9,blurb:"结构廓形 / 极简通勤包在小红书声量回升，多位 KOL 带动"},
+  成衣:{hot:.7,blurb:"入秋后羊绒与双面呢大衣进入搜索高峰"},
+  珠宝:{hot:.8,blurb:"高级珠宝「日常化佩戴」成新话题，明星红毯持续带热"},
+  鞋履:{hot:.45,blurb:"当季热度平稳，无明显趋势拉动"},
+  腕表:{hot:.3,blurb:"男士腕表社媒声量偏低、圈层化明显"},
+};
+/* 可推产品（① 产品入口用）；默认主推 = tote */
+const PRODUCTS=[
+  {id:"tote",name:"结构廓形 Tote（秋冬新季）",cat:"手袋",tag:"本周主推"},
+  {id:"coat",name:"羊绒双面呢大衣",cat:"成衣"},
+  {id:"neck",name:"高级珠宝项链",cat:"珠宝"},
+  {id:"flap",name:"链条翻盖小方包",cat:"手袋"},
+  {id:"watch",name:"精钢机械腕表",cat:"腕表"},
+];
+const DEFAULT_PID="tote";
+const prod=id=>PRODUCTS.find(p=>p.id===id);
 
 const CLIENTS=[
  {id:1,name:"周韵",city:"上海",tier:"VIC",spend:486000,count:22,lastBuy:38,lastContact:126,
@@ -324,16 +355,23 @@ const CLIENTS=[
 /* ============================ 打分逻辑 ============================ */
 const clamp=(x,a=0,b=100)=>Math.max(a,Math.min(b,x));
 const tierScore={VIC:1,VIP:.72,常规:.42};
+const topCatOf=c=>Object.entries(c.cat).sort((a,b)=>b[1]-a[1])[0][0];
+
+function potentialOf(c){
+  return clamp(100*(0.5*Math.min(c.spend/320000,1)+0.3*Math.min(c.count/22,1)+0.2*tierScore[c.tier]));
+}
+/* 空闲入口的 Relevance = 客户偏好与「当下热度」的吻合度（趋势层融入排序） */
+function relevanceIdle(c){
+  let r=0,w=0; for(const k in c.cat){r+=c.cat[k]*TRENDS[k].hot; w+=c.cat[k];}
+  return clamp(100*((r/(w||1))/0.9));
+}
+function confidenceOf(c){return clamp(100*Math.min(c.dp/12,1));}
 
 function score(c){
-  const potential=clamp(100*(0.5*Math.min(c.spend/320000,1)+0.3*Math.min(c.count/22,1)+0.2*tierScore[c.tier]));
-  let rel=0; for(const k in FOCUS){rel+=(c.cat[k]||0)*FOCUS[k];}
-  const relevance=clamp(100*(rel/0.7));            // 0.7 = 满配上限
-  const confidence=clamp(100*Math.min(c.dp/12,1));
+  const potential=potentialOf(c), relevance=relevanceIdle(c), confidence=confidenceOf(c);
   let priority=0.42*potential+0.34*relevance+0.24*confidence;
   const dormant=c.lastContact;
-  // 沉睡高潜机会加权：正是我们要打的客群
-  if(potential>=62&&dormant>=90) priority+=8;
+  if(potential>=62&&dormant>=90) priority+=8;           // 沉睡高潜机会加权
   let seg;
   if(potential>=62&&dormant>=90) seg="hot";
   else if(relevance>=62&&potential>=52) seg="warm";
@@ -342,6 +380,17 @@ function score(c){
   return {potential:Math.round(potential),relevance:Math.round(relevance),confidence:Math.round(confidence),
     priority:clamp(Math.round(priority)),seg,dormant};
 }
+/* 产品入口：对某个产品的匹配度（品类偏好为主 + 趋势加成） */
+function productFit(c,p){
+  const aff=Math.min((c.cat[p.cat]||0)/0.6,1);
+  return clamp(100*(0.75*aff+0.25*TRENDS[p.cat].hot));
+}
+function productScore(c,s,p){
+  const fit=productFit(c,p);
+  // 产品入口：匹配度主导，潜力/置信为次——避免"高潜但不相关"的客户挤到前面
+  return {fit:Math.round(fit),val:clamp(Math.round(0.7*fit+0.22*s.potential+0.08*s.confidence))};
+}
+
 const SEG={
   hot:{label:"沉睡高潜",v:"var(--ember)",soft:"var(--ember-soft)",ink:"var(--ember)"},
   warm:{label:"高匹配",v:"var(--accent)",soft:"var(--accent-soft)",ink:"var(--accent-ink)"},
@@ -350,17 +399,27 @@ const SEG={
 };
 
 function whyNow(c,s){
-  const topCat=Object.entries(c.cat).sort((a,b)=>b[1]-a[1])[0][0];
-  const matchesFocus=FOCUS[topCat]!==undefined;
-  const bits=[];
+  const top=topCatOf(c), bits=[];
   if(s.seg==="hot") bits.push(`潜力 ${s.potential} 分，却已 <b>${s.dormant} 天未联系</b>`);
   else if(s.dormant>=90) bits.push(`已 ${s.dormant} 天未主动联系`);
   else if(s.dormant<=30) bits.push(`近期互动活跃`);
-  if(matchesFocus) bits.push(`偏好「${topCat}」与本季主推高度吻合`);
-  else bits.push(`主偏好为「${topCat}」，与本季主推相关性偏低`);
-  if(s.confidence<48) bits.push(`数据较薄，建议先用相似客群推断`);
-  else if(c.items[0]) bits.push(`可从 ${c.items[0].n} 切入`);
+  if(TRENDS[top].hot>=0.7) bits.push(`偏好「${top}」正当红（趋势热度 ${Math.round(TRENDS[top].hot*100)}）`);
+  else bits.push(`主偏好「${top}」当下趋势平淡`);
+  if(s.confidence<48) bits.push(`数据较薄，可用相似客群 + 趋势推断`);
   return bits.slice(0,2).join("，")+"。";
+}
+function whyProduct(c,ps,p){
+  const aff=Math.round((c.cat[p.cat]||0)*100);
+  return `偏好「${p.cat}」占 ${aff}%，叠加该品类趋势热度 ${Math.round(TRENDS[p.cat].hot*100)} → 匹配 ${ps.fit} 分。`;
+}
+/* 低置信客户的趋势推断（① 冷启动救援） */
+function inferenceOf(c){
+  const top=topCatOf(c);
+  const rec=PRODUCTS.filter(p=>p.cat===top).sort((a,b)=>TRENDS[b.cat].hot-TRENDS[a.cat].hot)[0]
+        ||[...PRODUCTS].sort((a,b)=>TRENDS[b.cat].hot-TRENDS[a.cat].hot)[0];
+  return {rec:rec.name,cat:top,
+    basis:`同城 / 同层级 / 相近偏好客群的成交集中在「${top}」，叠加当下趋势`,
+    conf:"低置信 · 推断（需 SA 复核）"};
 }
 
 /* ============================ 话术引擎（无需 LLM） ============================ */
@@ -368,27 +427,25 @@ function dialect(city){
   if(["成都","重庆"].includes(city)) return "川渝客户，可点缀一句轻松的方言（如「宝宝」「巴适」）拉近距离";
   if(["香港","台北"].includes(city)) return "港台客户，语气可更谦和、多用敬语";
   if(city==="上海") return "沪上客户，语气精致、含蓄，避免过度热情";
-  return "用你平时和她/他说话的真实语气";
+  return "用你平时和 TA 说话的真实语气";
 }
-function relevantArrival(c){
-  const top=Object.entries(c.cat).sort((a,b)=>b[1]-a[1]).find(([k])=>NEW_ARRIVALS[k]);
-  return top?NEW_ARRIVALS[top[0]]:NEW_ARRIVALS["手袋"];
+function recProductFor(c){
+  const top=topCatOf(c);
+  return PRODUCTS.find(p=>p.cat===top)||prod(DEFAULT_PID);
 }
 function buildOpeners(c,s){
-  const first=c.name.replace(/^(Grace|Vivian|Karen|Mia)\s?/,"")||c.name;
-  const honor=c.tier==="VIC"?"":"";
-  const past=c.items[0], arrival=relevantArrival(c);
-  const dormant=s.dormant;
+  const past=c.items[0], rec=recProductFor(c), dormant=s.dormant;
   const A = dormant>=90
-    ? `${c.name}，好久没联系啦，最近好吗？前阵子整理到你之前入手的${past?past.n:"那几件"}，一直觉得特别适合你。这两天新到了「${arrival}」，风格和你一贯的品味很搭，先拍两张给你看看，喜欢我再帮你留。`
-    : `${c.name}，最近新到了「${arrival}」，我第一时间想到你——和你之前的${past?past.n:"选择"}是一个调性。不着急，你有空我发几张细节图给你参考。`;
-  const B = `${c.name}，这季店里主推的「${arrival}」到了，尺寸和颜色都还齐。你之前偏爱${Object.entries(c.cat).sort((x,y)=>y[1]-x[1])[0][0]}这类，正好有一款我觉得很衬你。要不要我先帮你预留、你方便时过来看看实物？`;
+    ? `${c.name}，好久没联系啦，最近好吗？前阵子整理到你之前入手的${past?past.n:"那几件"}，一直觉得特别适合你。这两天新到了「${rec.name}」，风格和你一贯的品味很搭，先拍两张给你看看，喜欢我再帮你留。`
+    : `${c.name}，最近新到了「${rec.name}」，我第一时间想到你——和你之前的${past?past.n:"选择"}是一个调性。不着急，你有空我发几张细节图给你参考。`;
+  const B = `${c.name}，这季「${rec.name}」到了，尺寸和颜色都还齐。你之前偏爱${topCatOf(c)}这类，正好有一款我觉得很衬你。要不要我先帮你预留、你方便时过来看看实物？`;
   return [{tone:"重连 · 低压力",text:A},{tone:"由头 · 新品切入",text:B}];
 }
 function factHooks(c,s){
-  const arr=[];
+  const arr=[], top=topCatOf(c), rec=recProductFor(c);
   if(c.items[0]) arr.push(`历史购买：${c.items.map(i=>`${i.n}（${i.s}）`).join("、")}`);
-  arr.push(`本季主推「${relevantArrival(c)}」，属其偏好品类 → 相关性 ${s.relevance} 分`);
+  arr.push(`建议主推「${rec.name}」，属其偏好品类「${top}」`);
+  arr.push(`📈 趋势谈资：${TRENDS[top].blurb}`);
   arr.push(`距上次主动联系 ${s.dormant} 天；距上次购买 ${c.lastBuy} 天`);
   const extra=c.sig.find(x=>/生日|活动|搬家|升任|出席/.test(x));
   if(extra) arr.push(`情境信号：${extra}`);
@@ -403,51 +460,107 @@ function emotionGuide(c){
   return g;
 }
 
-/* ============================ 渲染 ============================ */
-let SORT="priority", SELECTED=null;
+/* ============================ 状态与渲染 ============================ */
+let MODE="idle", SORT="priority", PID=DEFAULT_PID, QUERY="", SELECTED=null;
 const enriched=CLIENTS.map(c=>({c,s:score(c)}));
+const initial=c=>c.name.replace(/^(Grace|Vivian|Karen|Mia)\s?/,"").slice(0,1);
 
 function renderStats(){
   const hot=enriched.filter(e=>e.s.seg==="hot").length;
   const dormant=enriched.filter(e=>e.s.dormant>=90).length;
-  const avgP=Math.round(enriched.reduce((a,e)=>a+e.s.priority,0)/enriched.length);
-  const thin=enriched.filter(e=>e.s.seg==="thin").length;
+  const thin=enriched.filter(e=>e.s.confidence<48).length;
   const cards=[
     {k:"客户簿总数",v:enriched.length,sub:"",s:"var(--slate)"},
     {k:"🔥 沉睡高潜（今日机会）",v:hot,sub:"高潜力 + 90 天未联系",s:"var(--ember)"},
     {k:"待重连（90 天+ 沉默）",v:dormant,sub:"约 "+Math.round(dormant/enriched.length*100)+"% 客户簿",s:"var(--accent)"},
-    {k:"综合优先级均值",v:avgP,sub:"满分 100",s:"var(--sage)"},
+    {k:"📈 可趋势推断（低置信）",v:thin,sub:"冷启动救援覆盖",s:"var(--sage)"},
   ];
   document.getElementById("stats").innerHTML=cards.map(c=>
     `<div class="stat" style="--s:${c.s}"><div class="k">${c.k}</div><div class="v num">${c.v}${c.sub?` <small>${c.sub}</small>`:""}</div></div>`).join("");
 }
 
-function sortKey(e){
-  if(SORT==="potential") return e.s.potential;
-  if(SORT==="dormant") return e.s.dormant;
-  return e.s.priority;
+function renderCampaign(){
+  const t=document.getElementById("campaignTxt");
+  if(MODE==="product"){t.innerHTML=`产品入口 · 推 <b>${prod(PID).name}</b>`;}
+  else{t.innerHTML=`本周主推 · <b>${prod(DEFAULT_PID).name}</b>`;}
 }
+
+function renderModeCtrl(){
+  const el=document.getElementById("modeCtrl");
+  const qt=document.getElementById("queueTitle");
+  const lh=document.getElementById("lh"), lp=document.getElementById("lp");
+  if(MODE==="idle"){
+    qt.textContent="今日优先队列";
+    lh.textContent="今天，这 14 位客户里谁值得你花时间？";
+    lp.innerHTML='系统按 <b>潜力 × 匹配 × 置信</b> 三维排序（叠加趋势信号）；对选中客户，AI 负责事实钩子与谈资，把情感表达留给你。';
+    el.innerHTML=`<div class="sort" id="sort" role="group" aria-label="排序方式">
+      <button data-k="priority" aria-pressed="${SORT==='priority'}">综合优先级</button>
+      <button data-k="potential" aria-pressed="${SORT==='potential'}">潜力</button>
+      <button data-k="dormant" aria-pressed="${SORT==='dormant'}">沉睡天数</button></div>`;
+    el.querySelectorAll("#sort button").forEach(b=>b.onclick=()=>{SORT=b.dataset.k;renderModeCtrl();renderQueue();});
+  }else if(MODE==="product"){
+    qt.textContent="最该推给谁";
+    lh.textContent="这款产品，最该推给哪几位客户？";
+    lp.innerHTML='选一款产品，引擎按<b>「品类偏好 × 趋势热度」</b>重排客户，把最该主推的人顶到最前。';
+    el.innerHTML=`<select class="fld" id="prodSel" aria-label="选择产品">${
+      PRODUCTS.map(p=>`<option value="${p.id}" ${p.id===PID?"selected":""}>${p.name}${p.tag?"（"+p.tag+"）":""}</option>`).join("")}</select>`;
+    el.querySelector("#prodSel").onchange=e=>{PID=e.target.value;renderCampaign();renderQueue();};
+  }else{
+    qt.textContent="找客户";
+    lh.textContent="心里已经有客户了？直接找到 TA。";
+    lp.innerHTML='搜名字直达指定客户 —— 看档案、一键生成个性化开场白。';
+    el.innerHTML=`<input class="fld search" id="searchBox" placeholder="搜索客户姓名…" value="${QUERY}" aria-label="搜索客户">`;
+    const sb=el.querySelector("#searchBox");
+    sb.oninput=e=>{QUERY=e.target.value;renderQueue();};
+    setTimeout(()=>sb.focus(),0);
+  }
+}
+
+function currentList(){
+  let list=[...enriched];
+  if(MODE==="product"){
+    const p=prod(PID);
+    list.forEach(e=>e.ps=productScore(e.c,e.s,p));
+    list.sort((a,b)=>b.ps.val-a.ps.val);
+  }else if(MODE==="client"){
+    const q=QUERY.trim().toLowerCase();
+    if(q) list=list.filter(e=>e.c.name.toLowerCase().includes(q));
+    list.sort((a,b)=>b.s.priority-a.s.priority);
+  }else{
+    const key=SORT==="potential"?"potential":SORT==="dormant"?"dormant":"priority";
+    list.sort((a,b)=>b.s[key]-a.s[key]);
+  }
+  return list;
+}
+
 function renderQueue(){
-  const list=[...enriched].sort((a,b)=>sortKey(b)-sortKey(a));
-  document.getElementById("queue").innerHTML=list.map((e,i)=>{
+  const list=currentList();
+  const q=document.getElementById("queue");
+  if(!list.length){q.innerHTML=`<div class="emptyq">没有匹配「${QUERY}」的客户，换个名字试试。</div>`;return;}
+  q.innerHTML=list.map((e,i)=>{
     const {c,s}=e, seg=SEG[s.seg];
+    const isProd=MODE==="product";
+    const big=isProd?e.ps.fit:s.priority;
+    const lbl=isProd?"匹配度":"优先级";
+    const why=isProd?whyProduct(c,e.ps,prod(PID)):whyNow(c,s);
     return `<button class="card" data-id="${c.id}" aria-selected="${SELECTED===c.id}"
       style="--seg:${seg.v};--seg-soft:${seg.soft}">
       <div class="row1">
         <span class="rank num">${i+1}</span>
-        <span class="ava">${c.name.replace(/^(Grace|Vivian|Karen|Mia)\s?/,"").slice(0,1)}</span>
+        <span class="ava">${initial(c)}</span>
         <span class="who"><span class="nm">${c.name}
-          <span class="chip" style="background:${seg.soft};color:${seg.ink}">${s.seg==="hot"?"🔥 ":""}${seg.label}</span></span>
+          <span class="chip" style="background:${seg.soft};color:${seg.ink}">${s.seg==="hot"?"🔥 ":""}${seg.label}</span>
+          ${s.confidence<48?'<span class="chip" style="background:var(--slate-soft);color:var(--slate)">📈 可推断</span>':''}</span>
           <span class="sub">${c.city} · ${c.tier} · 消费 ¥${(c.spend/10000).toFixed(1)}万 · ${c.count} 单</span></span>
-        <span class="score"><span class="big num">${s.priority}</span><span class="lbl">优先级</span></span>
+        <span class="score"><span class="big num">${big}</span><span class="lbl">${lbl}</span></span>
       </div>
-      <div class="why" style="--seg:${seg.v};--seg-soft:${seg.soft}">${whyNow(c,s)}</div>
+      <div class="why" style="--seg:${seg.v};--seg-soft:${seg.soft}">${why}</div>
       <div class="bars">
         ${bar("p","潜力",s.potential)}${bar("r","匹配",s.relevance)}${bar("c","置信",s.confidence)}
       </div>
     </button>`;
   }).join("");
-  document.querySelectorAll(".card").forEach(el=>el.onclick=()=>select(+el.dataset.id));
+  q.querySelectorAll(".card").forEach(el=>el.onclick=()=>select(+el.dataset.id));
 }
 function bar(cls,lbl,v){return `<div class="bar ${cls}"><div class="bl"><span>${lbl}</span><span class="num">${v}</span></div>
   <div class="track"><div class="fill" style="width:${v}%"></div></div></div>`;}
@@ -459,13 +572,15 @@ function select(id){
   const seg=SEG[s.seg];
   document.getElementById("empty").hidden=true;
   const d=document.getElementById("detail");d.hidden=false;
-  const topCat=Object.entries(c.cat).sort((a,b)=>b[1]-a[1]);
+  const cats=Object.entries(c.cat).sort((a,b)=>b[1]-a[1]);
+  const top=topCatOf(c);
+  const inf=s.confidence<48?inferenceOf(c):null;
   d.innerHTML=`<div class="dcard">
     <div class="dhead">
-      <span class="ava" style="background:${seg.v}">${c.name.replace(/^(Grace|Vivian|Karen|Mia)\s?/,"").slice(0,1)}</span>
+      <span class="ava" style="background:${seg.v}">${initial(c)}</span>
       <div style="flex:1">
         <h2>${c.name}</h2>
-        <div class="meta">${c.city} · ${c.tier} · 客户簿排名信号见下</div>
+        <div class="meta">${c.city} · ${c.tier}</div>
         <div class="seg"><span class="chip" style="background:${seg.soft};color:${seg.ink}">${s.seg==="hot"?"🔥 ":""}${seg.label}</span>
           <span class="chip" style="background:var(--surface-2);color:var(--muted)">综合优先级 ${s.priority}</span></div>
       </div>
@@ -476,9 +591,13 @@ function select(id){
       <div class="fact"><div class="k">距上次购买</div><div class="v num">${c.lastBuy} 天</div></div>
       <div class="fact"><div class="k">距上次联系</div><div class="v num" style="color:${s.dormant>=90?'var(--ember)':'inherit'}">${c.lastContact} 天</div></div>
       <div class="fact" style="grid-column:1/-1"><div class="k">品类偏好</div>
-        <div class="taglist">${topCat.filter(([,w])=>w>0).map(([k,w])=>`<span class="tag"><b>${k}</b> ${Math.round(w*100)}%</span>`).join("")}</div></div>
+        <div class="taglist">${cats.filter(([,w])=>w>0).map(([k,w])=>`<span class="tag"><b>${k}</b> ${Math.round(w*100)}%</span>`).join("")}</div></div>
       <div class="fact" style="grid-column:1/-1"><div class="k">情境信号</div>
         <div class="taglist">${c.sig.map(x=>`<span class="tag">${x}</span>`).join("")}</div></div>
+      <div class="trend"><div class="k eyebrow">📈 趋势信号 · ${top}</div><div class="tv">${TRENDS[top].blurb}（热度 ${Math.round(TRENDS[top].hot*100)}/100）</div></div>
+      ${inf?`<div class="infer"><div class="k eyebrow">📈 趋势推断推荐 · 冷启动</div>
+        <div class="tv">数据较薄，推断可主推：<b>${inf.rec}</b></div>
+        <div class="src">依据：${inf.basis} · <b>${inf.conf}</b></div></div>`:""}
     </div>
     <div class="gen">
       <div class="gen-head"><h3>个性化开场白</h3>
@@ -487,7 +606,7 @@ function select(id){
           <button class="btn" id="genBtn">✦ 生成开场白</button>
         </div>
       </div>
-      <div id="genOut"><p style="color:var(--muted);font-size:13px">点击生成 —— AI 会基于 ${c.name} 的结构化数据，产出可直接编辑发送的开场白，并标注哪些是 AI 的事实钩子、哪些留给你做情感表达。</p></div>
+      <div id="genOut"><p style="color:var(--muted);font-size:13px">点击生成 —— AI 会基于 ${c.name} 的结构化数据 + 趋势谈资，产出可直接编辑发送的开场白，并标注哪些是 AI 的事实钩子、哪些留给你做情感表达。</p></div>
     </div>
   </div>`;
   document.getElementById("genBtn").onclick=()=>generate(c,s);
@@ -504,10 +623,7 @@ async function generate(c,s){
     btn.textContent="Claude 生成中…";
     try{result=await callClaude(c,s);live=true;}catch(err){result=null;}
   }
-  if(!result){
-    // 内置引擎
-    result={openers:buildOpeners(c,s),facts:factHooks(c,s),emo:emotionGuide(c)};
-  }
+  if(!result){result={openers:buildOpeners(c,s),facts:factHooks(c,s),emo:emotionGuide(c)};}
   btn.disabled=false;btn.textContent="✦ 生成开场白";
   document.getElementById("regen").hidden=false;
   out.innerHTML=`
@@ -532,14 +648,16 @@ async function generate(c,s){
 async function callClaude(c,s){
   const key=localStorage.getItem("apiKey");
   const model=localStorage.getItem("model")||"claude-sonnet-5";
+  const top=topCatOf(c);
   const sys=`你是奢侈品行业的 clienteling 话术助手，服务中国市场的 SA（销售顾问）。铁律：
-1) AI 只负责"事实钩子"（客户买过什么、新品/活动、尺寸颜色、距上次联系天数）；情感表达和关系温度留给 SA，不要替 SA 把话说满、不要显得像"专家"。
+1) AI 只负责"事实钩子"（客户买过什么、新品/活动、尺寸颜色、距上次联系天数、趋势谈资）；情感表达和关系温度留给 SA，不要替 SA 把话说满、不要显得像"专家"。
 2) 话术必须像真人、口语化、本地化、非官方模板；避免营销腔和逼单。
 3) 首条消息目标是"让客户愿意回复"，给情绪价值优先于推销。
 只返回 JSON：{"openers":[{"tone":"简短标签","text":"开场白"},{"tone":"","text":""}],"facts":["事实钩子..."],"emo":["给SA的情感表达提示..."]}`;
   const profile={姓名:c.name,城市:c.city,层级:c.tier,生命周期消费:c.spend,购买次数:c.count,
     距上次购买天数:c.lastBuy,距上次联系天数:c.lastContact,品类偏好:c.cat,历史购买:c.items,情境信号:c.sig,
-    本季主推:relevantArrival(c),三维打分:{潜力:s.potential,匹配:s.relevance,置信:s.confidence}};
+    建议主推:recProductFor(c).name,趋势谈资:TRENDS[top].blurb,
+    三维打分:{潜力:s.potential,匹配:s.relevance,置信:s.confidence}};
   const res=await fetch("https://api.anthropic.com/v1/messages",{
     method:"POST",headers:{"content-type":"application/json","x-api-key":key,
       "anthropic-version":"2023-06-01","anthropic-dangerous-direct-browser-access":"true"},
@@ -554,12 +672,11 @@ async function callClaude(c,s){
 }
 
 /* ============================ 交互 ============================ */
-document.getElementById("sort").querySelectorAll("button").forEach(b=>b.onclick=()=>{
-  SORT=b.dataset.k;
-  document.querySelectorAll("#sort button").forEach(x=>x.setAttribute("aria-pressed",x===b));
-  renderQueue();
+document.getElementById("modes").querySelectorAll("button").forEach(b=>b.onclick=()=>{
+  MODE=b.dataset.m;
+  document.querySelectorAll("#modes button").forEach(x=>x.setAttribute("aria-pressed",x===b));
+  renderCampaign();renderModeCtrl();renderQueue();
 });
-// 设置面板
 const modal=document.getElementById("modal");
 function openSet(){
   document.getElementById("apiKey").value=localStorage.getItem("apiKey")||"";
@@ -579,7 +696,6 @@ document.getElementById("saveSet").onclick=()=>{
   localStorage.setItem("live",document.getElementById("liveSwitch").getAttribute("aria-checked")==="true"?"1":"0");
   modal.dataset.open="false";
 };
-// 主题切换
 const themeBtn=document.getElementById("themeBtn");
 themeBtn.onclick=()=>{
   const cur=document.documentElement.getAttribute("data-theme");
@@ -587,13 +703,12 @@ themeBtn.onclick=()=>{
   document.documentElement.setAttribute("data-theme",next);
 };
 document.getElementById("aboutLink").onclick=()=>{
-  alert("这个 MVP 验证两件事：\n\n① 用「潜力 × 匹配 × 置信」三维排序，能不能比 SA「看心情」的名单更准（当前误判率约 80%）。\n\n② AI 基于结构化数据生成的开场白，能不能把「写话术」这个最耗人力的环节从约 10 分钟降到近乎零，且质量不输 top sales。\n\nAI 管事实，SA 管情感。发送权始终在人手里。");
+  alert("这个 MVP 验证：\n\n① 排序：用「潜力 × 匹配 × 置信」+ 趋势信号，能不能比 SA「看心情」的名单更准（当前误判率约 80%）。\n\n② 三入口：空闲→联系谁 / 产品→推给谁 / 客人→说什么，同一套引擎从任一起点进入。\n\n③ 冷启动：对低置信客户，用相似客群 + 趋势给出带出处的推断推荐。\n\n④ 话术：把「写话术」从约 10 分钟降到近乎零，AI 管事实、SA 管情感，发送权始终在人手里。");
 };
 
 /* init */
 try{
-  renderStats();renderQueue();
-  // 默认选中排第一的沉睡高潜客户，讲好故事
+  renderStats();renderCampaign();renderModeCtrl();renderQueue();
   const first=[...enriched].sort((a,b)=>b.s.priority-a.s.priority)[0];
   select(first.c.id);
 }catch(e){document.getElementById("queue").innerHTML="<p>初始化出错："+e.message+"</p>";}
